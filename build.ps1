@@ -26,9 +26,17 @@ function Need($name) {
     return $c.Source
 }
 
-$cc = Need 'clang'
-$cxx = (Get-Command 'clang++' -ErrorAction SilentlyContinue).Source
-if (-not $cxx) { $cxx = $cc }
+# Prefer LLVM-MinGW's clang, which brings its own Windows headers and libraries. Plain
+# clang targets MSVC and needs Visual Studio's Build Tools to link anything.
+$mingw = Get-Command 'x86_64-w64-mingw32-clang' -ErrorAction SilentlyContinue
+if ($mingw) {
+    $cc = $mingw.Source
+    $cxx = (Get-Command 'x86_64-w64-mingw32-clang++').Source
+} else {
+    $cc = Need 'clang'
+    $cxx = (Get-Command 'clang++' -ErrorAction SilentlyContinue).Source
+    if (-not $cxx) { $cxx = $cc }
+}
 Need 'cmake' | Out-Null
 Need 'ninja' | Out-Null
 Need 'python' | Out-Null

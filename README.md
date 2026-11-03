@@ -48,10 +48,12 @@ an in-game menu:
 ## Building
 
 Requirements: CMake 3.20+, Ninja, Python 3, Git, and clang with C++20 support. SDL2 is
-built automatically on Windows the first time. On Windows:
+built automatically on Windows the first time. On Windows, use
+[LLVM-MinGW](https://github.com/mstorsjo/llvm-mingw), which brings its own Windows
+libraries (plain LLVM also needs Visual Studio's Build Tools):
 
 ```powershell
-winget install Kitware.CMake Ninja-build.Ninja LLVM.LLVM Python.Python.3.13
+winget install Kitware.CMake Ninja-build.Ninja MartinStorsjo.LLVM-MinGW.UCRT Python.Python.3.13
 ```
 
 ```sh
