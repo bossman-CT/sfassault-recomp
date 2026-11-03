@@ -1,8 +1,10 @@
 # Status and roadmap
 
-**Current state: it builds; booting is next.** Milestone 0 is done apart from the
-frame-rate measurements. The first Windows build compiles and links: 7,650 recompiled
-functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22).
+**Current state: it boots to its first menu, with readable text, at 60 fps.** Milestone 0
+is done apart from the frame-rate measurements. The Windows build compiles 7,650 recompiled
+functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22). The game
+initializes the SDK, links its modules with `OSLink`, and draws its first dialog. The title
+screen is next.
 
 ## Reference disc
 
