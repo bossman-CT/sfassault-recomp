@@ -11,13 +11,11 @@ screen is next.
 | | |
 |---|---|
 | Disc ID | `GF7E01` (USA), revision 0 |
-| Disc SHA-1 | `065341b8575adea00fd0a75e389f135d32840423` (1,459,978,240 bytes), the same as [Redump disc 1857](http://redump.org/disc/1857/) |
+| Disc SHA-1 | `065341b8575adea00fd0a75e389f135d32840423` (1,459,978,240 bytes) |
 | `main.dol` SHA-1 | `ae7201e7acd5a29acc807d7668a856392fd37ff9` |
 | Code modules | 23 `.rel` files, linked at run time with `OSLink` |
 | Symbol maps on the disc | None: 962 files, the only text file a 68-byte sound `.ini` |
-
-`python tools/extract_dol.py --verify-disc` checks a dump against both hashes and writes
-its `main.dol` to `analysis/out/`.
+| Redump | Matches disc 1857: size, CRC-32 07166d23, MD5 and SHA-1 |
 
 Each milestone has a matching GitHub milestone, and each item has an issue. Pick an
 issue, say you're working on it, and open a pull request when you're done (see
