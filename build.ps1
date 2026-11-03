@@ -8,6 +8,12 @@
 $ErrorActionPreference = 'Continue'
 Set-Location $PSScriptRoot
 
+# The LLVM installer (and winget) doesn't always put clang on PATH; look where it installs.
+$llvm = Join-Path $env:ProgramFiles 'LLVM\bin'
+if ((Test-Path "$llvm\clang.exe") -and -not (Get-Command clang -ErrorAction SilentlyContinue)) {
+    $env:Path = "$llvm;$env:Path"
+}
+
 function Need($name) {
     $c = Get-Command $name -ErrorAction SilentlyContinue
     if (-not $c) { throw "$name not found on PATH. See README.md for requirements." }

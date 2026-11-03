@@ -1,0 +1,14 @@
+# addr name  -- functions named by hand, overriding analysis/symbols.txt. The symbol file
+# leaves these SDK functions unnamed. Each was identified by its position in the SDK's
+# source order (OSContext.c, OSError.c, OSLink.c) and by what it calls: OSLink is the
+# small wrapper around Link, and OSUnlink calls Undo. This SDK has no OSLinkFixed.
+8012F7D8 OSGetCurrentContext
+8012F7E4 OSSaveContext
+8012FE48 OSPanic
+80133658 OSNotifyLink
+8013365C OSNotifyUnlink
+80133660 Relocate
+8013391C Link
+80133BFC OSLink
+80133C20 Undo
+80133E58 OSUnlink

@@ -1,0 +1,2 @@
+# Call sites to these get setjmp treatment (context resume points).
+8012F7E4 OSSaveContext

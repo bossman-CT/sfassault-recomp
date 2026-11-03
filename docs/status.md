@@ -1,6 +1,17 @@
 # Status and roadmap
 
-**Current state: nothing runs yet.** The project is set up, and milestone 0 is next.
+**Current state: nothing runs yet.** Milestone 0 is done apart from the frame-rate
+measurements; milestone 1, the first build, is next.
+
+## Reference disc
+
+| | |
+|---|---|
+| Disc ID | `GF7E01` (USA), revision 0 |
+| Disc SHA-1 | `065341b8575adea00fd0a75e389f135d32840423` (1,459,978,240 bytes) |
+| `main.dol` SHA-1 | `ae7201e7acd5a29acc807d7668a856392fd37ff9` |
+| Code modules | 23 `.rel` files, linked at run time with `OSLink` |
+| Symbol maps on the disc | None: 962 files, the only text file a 68-byte sound `.ini` |
 
 Each milestone has a matching GitHub milestone, and each item has an issue. Pick an
 issue, say you're working on it, and open a pull request when you're done (see
@@ -10,12 +21,13 @@ issue, say you're working on it, and open a pull request when you're done (see
 
 Everything the recompiler needs to know about the game's executable.
 
-- [ ] Record the reference disc: `GF7E01`, its revision and the SHA-1 of a clean dump
-- [ ] Extract `main.dol` and record its SHA-1 in `CMakeLists.txt`
-- [ ] Generate `analysis/config.yml` and `analysis/symbols.txt` with decomp-toolkit
-- [ ] Identify the SDK functions for `recomp/hle.txt` and `recomp/special_calls.txt`
-- [ ] Find the scheduler's idle loop for `recomp/idle.txt`
-- [ ] Check whether the disc ships any symbol or map files that would name functions
+- [x] Record the reference disc: `GF7E01`, its revision and the SHA-1 of a clean dump
+- [x] Extract `main.dol` and record its SHA-1 in `CMakeLists.txt`
+- [x] Generate `analysis/config.yml` and `analysis/symbols.txt` with decomp-toolkit
+- [x] Symbols for the 23 relocatable modules, and `OSLink`/`OSUnlink` named for the recompiler
+- [x] Identify the SDK functions for `recomp/hle.txt` and `recomp/special_calls.txt`
+- [x] Find the scheduler's idle loop for `recomp/idle.txt`
+- [x] Check whether the disc ships any symbol or map files that would name functions
 - [ ] Confirm the game's native frame rate, per mode (menus, flight, on foot, multiplayer)
 
 ## Milestone 1: Boots
