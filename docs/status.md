@@ -15,7 +15,8 @@ Everything the recompiler needs to know about the game's executable.
 - [ ] Generate `analysis/config.yml` and `analysis/symbols.txt` with decomp-toolkit
 - [ ] Identify the SDK functions for `recomp/hle.txt` and `recomp/special_calls.txt`
 - [ ] Find the scheduler's idle loop for `recomp/idle.txt`
-- [ ] Check whether the disc ships any symbol or map files that would name functions
+- [x] Check whether the disc ships any symbol or map files that would name functions:
+      it doesn't (`tools/list_disc_files.py --unusual`)
 - [ ] Confirm the game's native frame rate, per mode (menus, flight, on foot, multiplayer)
 
 ## Milestone 1: Boots
