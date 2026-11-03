@@ -4,13 +4,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-# Several gcn-recomp runtime files call getenv and atoi without including <cstdlib>.
-# Other toolchains pull it in indirectly; LLVM-MinGW's libc++ doesn't. Include it in every
-# C++ file until that's fixed upstream (issue #23).
-if(MINGW)
-  add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-includecstdlib>")
-endif()
-
 # Everything that is not specific to Star Fox Assault lives in gcn-recomp (a submodule):
 # the recompiler, the GameCube runtime, the renderer and the frontends. See its README.
 add_subdirectory(gcn-recomp)
