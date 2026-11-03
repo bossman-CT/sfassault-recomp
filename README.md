@@ -78,7 +78,8 @@ On Linux or macOS:
 
 The game is `build/sfassault.exe` (`build/sfassault` elsewhere). It finds the disc image
 it was built from, so it needs no arguments. `--scale=N` sets the internal resolution
-multiplier.
+multiplier, and `--fullscreen` starts in fullscreen. While playing, **F11** or **Alt+Enter**
+toggles fullscreen and **Esc** quits.
 
 ## Contributing
 
