@@ -1,7 +1,8 @@
 # Status and roadmap
 
-**Current state: nothing runs yet.** Milestone 0 is done apart from the frame-rate
-measurements; milestone 1, the first build, is next.
+**Current state: it builds; booting is next.** Milestone 0 is done apart from the
+frame-rate measurements. The first Windows build compiles and links: 7,650 recompiled
+functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22).
 
 ## Reference disc
 
@@ -32,7 +33,7 @@ Everything the recompiler needs to know about the game's executable.
 
 ## Milestone 1: Boots
 
-- [ ] Configure and build on Windows with clang
+- [x] Configure and build on Windows with clang (LLVM-MinGW)
 - [ ] Reach the Nintendo and Namco logos
 - [ ] Reach the title screen and main menu
 - [ ] Load and save a profile on the emulated memory card
