@@ -6,12 +6,23 @@ Each milestone has a matching GitHub milestone, and each item has an issue. Pick
 issue, say you're working on it, and open a pull request when you're done (see
 [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
+## Reference disc
+
+| | |
+|---|---|
+| Game | Star Fox Assault (USA), disc ID `GF7E01`, revision 0 |
+| Disc image | 1,459,978,240 bytes, SHA-1 `065341b8575adea00fd0a75e389f135d32840423`, the same as [Redump disc 1857](http://redump.org/disc/1857/) |
+| `main.dol` | at disc offset `0x20300`, `0x29B340` bytes, SHA-1 `ae7201e7acd5a29acc807d7668a856392fd37ff9` |
+
+`python tools/extract_dol.py --verify-disc` checks a dump against both and writes its
+`main.dol` to `analysis/out/`.
+
 ## Milestone 0: Analysis
 
 Everything the recompiler needs to know about the game's executable.
 
-- [ ] Record the reference disc: `GF7E01`, its revision and the SHA-1 of a clean dump
-- [ ] Extract `main.dol` and record its SHA-1 in `CMakeLists.txt`
+- [x] Record the reference disc: `GF7E01`, its revision and the SHA-1 of a clean dump
+- [x] Extract `main.dol` and record its SHA-1 in `CMakeLists.txt`
 - [ ] Generate `analysis/config.yml` and `analysis/symbols.txt` with decomp-toolkit
 - [ ] Identify the SDK functions for `recomp/hle.txt` and `recomp/special_calls.txt`
 - [ ] Find the scheduler's idle loop for `recomp/idle.txt`

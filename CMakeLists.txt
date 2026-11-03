@@ -9,10 +9,9 @@ endif()
 add_subdirectory(gcn-recomp)
 gcn_enable_languages()
 
-# SHA-1 of GF7E01's main.dol, which the build checks the user's disc against. Filled in
-# by the first analysis pass, together with analysis/symbols.txt and the recomp/ tables
-# (docs/status.md, milestone 0).
-set(SFASSAULT_DOL_SHA1 "")
+# SHA-1 of GF7E01's main.dol (disc revision 0), which the build checks the user's disc
+# against. tools/extract_dol.py prints it, and docs/status.md records the disc's own hash.
+set(SFASSAULT_DOL_SHA1 "ae7201e7acd5a29acc807d7668a856392fd37ff9")
 
 if(SFASSAULT_DOL_SHA1 STREQUAL "" OR NOT EXISTS ${CMAKE_SOURCE_DIR}/analysis/symbols.txt)
   message(FATAL_ERROR
