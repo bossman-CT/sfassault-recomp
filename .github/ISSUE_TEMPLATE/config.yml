@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Bug in the shared GameCube runtime (gcn-recomp)
+    url: https://github.com/ethannicholas/gcn-recomp/issues
+    about: Rendering, audio or hardware problems that would affect any game belong upstream.

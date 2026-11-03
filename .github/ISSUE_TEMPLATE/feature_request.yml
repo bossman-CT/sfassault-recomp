@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest an enhancement, such as a graphics option, control scheme or quality-of-life change.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What would you like?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why?
+      description: The problem it solves, or what it makes better.
+    validations:
+      required: true
+  - type: textarea
+    id: how
+    attributes:
+      label: Ideas for how it could work
+      description: Optional. Settings, defaults, how it would interact with the original game.
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contributing
+      options:
+        - label: I'd like to work on this myself.

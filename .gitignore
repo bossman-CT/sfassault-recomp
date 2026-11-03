@@ -1,0 +1,30 @@
+# User-supplied game data: never commit anything from the disc.
+rom/*
+!rom/README.md
+*.iso
+*.gcm
+*.rvz
+*.wia
+*.gcz
+*.ciso
+*.wbfs
+*.nfs
+*.tgc
+*.dol
+*.rel
+disc/
+
+# Generated / local
+# Any build directory holds the recompiled game code in gen/, which is derived from the
+# disc and must never be committed. The trailing slash keeps build.ps1 and build.sh tracked.
+build*/
+saves/
+analysis/out/
+analysis/all.s
+tools/dtk
+tools/dtk.exe
+__pycache__/
+.vscode/
+.vs/
+.DS_Store
+Thumbs.db
