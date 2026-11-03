@@ -1,10 +1,10 @@
 # Status and roadmap
 
-**Current state: it boots to its first menu, with readable text, at 60 fps.** Milestone 0
+**Current state: it reaches the title screen, with readable text, at 60 fps.** Milestone 0
 is done apart from the frame-rate measurements. The Windows build compiles 7,650 recompiled
 functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22). The game
-initializes the SDK, links its modules with `OSLink`, and draws its first dialog. The title
-screen is next.
+initializes the SDK, links its modules with `OSLink`, takes keyboard input past its first
+dialog and shows the title screen. The main menu and mission 1 are next.
 
 ## Reference disc
 
@@ -38,9 +38,11 @@ Everything the recompiler needs to know about the game's executable.
 
 - [x] Configure and build on Windows with clang (LLVM-MinGW)
 - [ ] Reach the Nintendo and Namco logos
-- [ ] Reach the title screen and main menu
+- [x] Reach the title screen
+- [ ] Reach the main menu
 - [ ] Load and save a profile on the emulated memory card
 - [ ] Audio plays: music and sound effects
+- [x] Keyboard input works through SDL
 - [ ] Controller input works through SDL
 
 ## Milestone 2: First mission
