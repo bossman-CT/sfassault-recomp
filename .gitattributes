@@ -1,0 +1,11 @@
+# Keep LF in the repository on every platform, so a Windows clone with
+# core.autocrlf=true doesn't show every file as changed.
+* text=auto eol=lf
+
+# PowerShell and batch scripts run best with CRLF on Windows.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+
+*.bin binary
+*.png binary
+*.ico binary
