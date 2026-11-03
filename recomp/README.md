@@ -12,6 +12,5 @@ text list of addresses; see gcn-recomp's README for the exact format.
 | `patches.txt` | Instruction patches that fix game-specific problems, each with a comment saying why |
 | `steps.txt` | The game's per-frame steps, needed to run above its native frame rate |
 
-None of these exist yet. They come out of milestone 0 in
-[docs/status.md](../docs/status.md), except `steps.txt`, which belongs to the
-high-frame-rate work.
+All but `steps.txt` are filled in for `GF7E01`. `steps.txt` belongs to the
+high-frame-rate work (issue #12).

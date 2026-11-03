@@ -9,24 +9,24 @@ endif()
 add_subdirectory(gcn-recomp)
 gcn_enable_languages()
 
-# SHA-1 of GF7E01's main.dol, which the build checks the user's disc against. Filled in
-# by the first analysis pass, together with analysis/symbols.txt and the recomp/ tables
-# (docs/status.md, milestone 0).
-set(SFASSAULT_DOL_SHA1 "")
-
-if(SFASSAULT_DOL_SHA1 STREQUAL "" OR NOT EXISTS ${CMAKE_SOURCE_DIR}/analysis/symbols.txt)
-  message(FATAL_ERROR
-    "This project can't build yet: the DOL hash and analysis/symbols.txt come from the "
-    "first analysis pass. See docs/status.md, milestone 0.")
-endif()
+# The game keeps much of its code in relocatable modules on the disc, which it links at
+# run time with OSLink. Each is recompiled at a canonical address (gcn-recomp docs/rels.md),
+# using its symbols in analysis/rels/<module>.txt.
+set(SFASSAULT_RELS
+  md0 md1 md2 m0 m009 m1 m10 m2 m3 m4 m5 m6 m7 m8 m9
+  mb01a mb01b mb02 mb05 mb10a mbg0 mbg1 mbg2)
+list(TRANSFORM SFASSAULT_RELS APPEND .rel OUTPUT_VARIABLE SFASSAULT_REL_FILES)
 
 gcn_add_game(
   NAME sfassault
   TITLE "Star Fox Assault"
   LABEL "sfassault-recomp"
   DISC_ID GF7E01
-  DOL_SHA1 ${SFASSAULT_DOL_SHA1}
+  # main.dol of GF7E01 revision 0 (disc SHA-1 065341b8575adea00fd0a75e389f135d32840423)
+  DOL_SHA1 ae7201e7acd5a29acc807d7668a856392fd37ff9
   SYMBOLS ${CMAKE_SOURCE_DIR}/analysis/symbols.txt
   TABLES ${CMAKE_SOURCE_DIR}/recomp
-  # The game's native rate; checked against hardware in milestone 0.
+  RELS ${SFASSAULT_REL_FILES}
+  REL_SYMBOLS ${CMAKE_SOURCE_DIR}/analysis/rels
+  # The game's native rate; to be confirmed per mode (issue #7).
   FPS 60)

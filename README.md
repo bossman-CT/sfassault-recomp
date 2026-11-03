@@ -10,8 +10,8 @@ the game's PowerPC code to C with [gcn-recomp](https://github.com/ethannicholas/
 
 ## Status
 
-**Early: nothing runs yet.** The project structure is in place and the first job is
-analyzing the game's executable. See [docs/status.md](docs/status.md) for the roadmap
+**Early: nothing runs yet.** Analysis of the game's code is done; getting the first
+build to boot is next. See [docs/status.md](docs/status.md) for the roadmap
 and the [issues](../../issues) for what's being worked on.
 
 ## Planned features
@@ -47,12 +47,12 @@ an in-game menu:
 
 ## Building
 
-> [!NOTE]
-> The build doesn't work yet: it stops until milestone 0 provides the executable's
-> hash and symbols.
-
 Requirements: CMake 3.20+, Ninja, Python 3, Git, and clang with C++20 support. SDL2 is
-built automatically on Windows the first time.
+built automatically on Windows the first time. On Windows:
+
+```powershell
+winget install Kitware.CMake Ninja-build.Ninja LLVM.LLVM Python.Python.3.13
+```
 
 ```sh
 git clone --recursive https://github.com/bossman-CT/sfassault-recomp.git
@@ -87,9 +87,11 @@ are a good place to start.
 - [decomp-toolkit](https://github.com/encounter/decomp-toolkit) and
   [dtk-template](https://github.com/encounter/dtk-template) by encounter, for analyzing
   the executable
-- Related projects: [xSNAIRZx/star-fox-assault-recomp](https://github.com/xSNAIRZx/star-fox-assault-recomp)
-  and the [gabefletch/StarFoxAssault](https://github.com/gabefletch/StarFoxAssault)
-  decompilation
+- [gabefletch/StarFoxAssault](https://github.com/gabefletch/StarFoxAssault): the
+  `main.dol` symbols and splits in `analysis/` (CC0)
+- [xSNAIRZx/star-fox-assault-recomp](https://github.com/xSNAIRZx/star-fox-assault-recomp):
+  the relocatable-module symbols in `analysis/rels/` (MIT, see
+  [analysis/rels/LICENSE](analysis/rels/LICENSE))
 
 ## Legal
 
