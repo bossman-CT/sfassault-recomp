@@ -1,11 +1,12 @@
 # Status and roadmap
 
-**Current state: it reaches the title screen, with readable text, at 60 fps.** Milestone 0
+**Current state: mission 1 loads and plays, at 60 fps.** Milestone 0
 is done apart from the frame-rate measurements. The Windows build compiles 7,650 recompiled
 functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22). The game
 initializes the SDK, links its modules with `OSLink`, takes keyboard input past its first
-dialog, shows the title screen, creates a save on the emulated memory card and opens User
-Settings. The main menu and mission 1 are next.
+dialog, shows the title screen, creates a save on the emulated memory card, opens User
+Settings and runs the mission 1 briefing and mission, played with a DS4 through DS4Windows.
+Finishing mission 1 is next.
 
 ## Reference disc
 
@@ -45,10 +46,11 @@ Everything the recompiler needs to know about the game's executable.
 - [ ] Load that save after a restart
 - [ ] Audio plays: music and sound effects
 - [x] Keyboard input works through SDL
-- [ ] Controller input works through SDL
+- [x] Controller input works through SDL (DS4 via DS4Windows)
 
 ## Milestone 2: First mission
 
+- [x] Mission 1's briefing and mission load and play
 - [ ] Finish mission 1, start to end, including cutscenes
 - [ ] No crashes or hangs over a full run
 - [ ] Compare against Dolphin and record any visual differences
@@ -98,3 +100,4 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 
 - Modules `m7` and `m009` aren't built, because they share module ID 11 with `m8` (#22).
 - System-font text has almost no space between words (#25).
+- Characters' mouths don't move during briefing transmissions (#26).
