@@ -8,6 +8,12 @@
 $ErrorActionPreference = 'Continue'
 Set-Location $PSScriptRoot
 
+# A terminal opened before CMake, Ninja or LLVM were installed still has the old PATH, so
+# add the saved machine and user PATH to it.
+$env:Path = @($env:Path,
+    [Environment]::GetEnvironmentVariable('Path', 'Machine'),
+    [Environment]::GetEnvironmentVariable('Path', 'User')) -join ';'
+
 # The LLVM installer (and winget) doesn't always put clang on PATH; look where it installs.
 $llvm = Join-Path $env:ProgramFiles 'LLVM\bin'
 if ((Test-Path "$llvm\clang.exe") -and -not (Get-Command clang -ErrorAction SilentlyContinue)) {
