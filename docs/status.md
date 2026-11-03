@@ -4,7 +4,8 @@
 is done apart from the frame-rate measurements. The Windows build compiles 7,650 recompiled
 functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22). The game
 initializes the SDK, links its modules with `OSLink`, takes keyboard input past its first
-dialog and shows the title screen. The main menu and mission 1 are next.
+dialog, shows the title screen, creates a save on the emulated memory card and opens User
+Settings. The main menu and mission 1 are next.
 
 ## Reference disc
 
@@ -40,7 +41,8 @@ Everything the recompiler needs to know about the game's executable.
 - [ ] Reach the Nintendo and Namco logos
 - [x] Reach the title screen
 - [ ] Reach the main menu
-- [ ] Load and save a profile on the emulated memory card
+- [x] Create a save on the emulated memory card
+- [ ] Load that save after a restart
 - [ ] Audio plays: music and sound effects
 - [x] Keyboard input works through SDL
 - [ ] Controller input works through SDL
@@ -94,4 +96,5 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 
 ## Known problems
 
-None yet, because nothing runs.
+- Modules `m7` and `m009` aren't built, because they share module ID 11 with `m8` (#22).
+- System-font text has almost no space between words (#25).
