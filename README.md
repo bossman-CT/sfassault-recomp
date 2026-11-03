@@ -10,8 +10,8 @@ the game's PowerPC code to C with [gcn-recomp](https://github.com/ethannicholas/
 
 ## Status
 
-**Early: nothing runs yet.** Analysis of the game's code is done; getting the first
-build to boot is next. See [docs/status.md](docs/status.md) for the roadmap
+**Early: it builds, but doesn't boot yet.** The game's code is analyzed and recompiled,
+and the Windows build links; getting it to the title screen is next. See [docs/status.md](docs/status.md) for the roadmap
 and the [issues](../../issues) for what's being worked on.
 
 ## Planned features
@@ -56,6 +56,9 @@ libraries (plain LLVM also needs Visual Studio's Build Tools):
 winget install Kitware.CMake Ninja-build.Ninja MartinStorsjo.LLVM-MinGW.UCRT Python.Python.3.13
 ```
 
+Known to build with CMake 4.4.4, Ninja 1.13.2, LLVM-MinGW 20261020 (clang 23.1.4, UCRT)
+and Python 3.13.15.
+
 ```sh
 git clone --recursive https://github.com/bossman-CT/sfassault-recomp.git
 cd sfassault-recomp
@@ -72,6 +75,10 @@ On Linux or macOS:
 ```sh
 ./build.sh
 ```
+
+The game is `build/sfassault.exe` (`build/sfassault` elsewhere). It finds the disc image
+it was built from, so it needs no arguments. `--scale=N` sets the internal resolution
+multiplier.
 
 ## Contributing
 

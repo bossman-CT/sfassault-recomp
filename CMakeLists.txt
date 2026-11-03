@@ -40,3 +40,16 @@ gcn_add_game(
   REL_SYMBOLS ${CMAKE_SOURCE_DIR}/analysis/rels
   # The game's native rate; to be confirmed per mode (issue #7).
   FPS 60)
+
+# LLVM-MinGW's C++ runtime is a pair of DLLs. Put them next to the executables so the game
+# starts from Explorer, not only from a shell with LLVM-MinGW on PATH.
+if(MINGW)
+  get_filename_component(_mingw_bin ${CMAKE_CXX_COMPILER} DIRECTORY)
+  foreach(_target sfassault sfassault_bench)
+    if(TARGET ${_target})
+      add_custom_command(TARGET ${_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${_mingw_bin}/libc++.dll ${_mingw_bin}/libunwind.dll $<TARGET_FILE_DIR:${_target}>)
+    endif()
+  endforeach()
+endif()
