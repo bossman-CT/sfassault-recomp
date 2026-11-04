@@ -100,4 +100,3 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 
 - Modules `m7` and `m009` aren't built, because they share module ID 11 with `m8` (#22).
 - System-font text has almost no space between words (#25).
-- Characters' mouths don't move during briefing transmissions (#26).
