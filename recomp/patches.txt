@@ -1,2 +1,9 @@
 # Instruction patches for game-specific problems: one per line, each with a comment
-# saying what it fixes. See gcn-recomp's README for the format. None yet.
+# saying what it fixes. See gcn-recomp's README for the format.
+
+# The game's logic rate (issue #12). fn_8003AEB0 runs every frame and derives the game's
+# time step from the frames per second it is told (sda-30252: 60 in play, 30 in some
+# cutscenes): the 16.16 time a frame adds to the game clock, the float time step and the
+# frame multiplier that hundreds of sites read. Reading it divided by the step scale makes
+# it 120 (or 60) at 120 fps, and leaves it as it is at 60, where the scale is 1.
+8003AEC4 c->r[6] = (uint32_t)(int32_t)((double)(int32_t)LD32((c->r[13] + (uint32_t)-30252)) / gcn_step_scale(0x8003AEC4u, 1) + 0.5);

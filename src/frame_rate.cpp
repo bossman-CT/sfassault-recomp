@@ -3,9 +3,10 @@
 // The game paces itself on the retrace: after each frame it waits until a set number of
 // fields has passed since the last one (one in play, two in some cutscenes), so it runs
 // at 60 or 30 fps. Run on a VI that retraces twice a field (vi_set_rate) it runs at 120 or
-// 60, and every per-frame step listed in recomp/steps.txt is halved (step_set_scale), so
-// the game keeps its speed. The CPU is made twice as fast too (clock_set_cpu_scale), so a
-// frame's work takes the same share of its shorter frame as before.
+// 60. The step scale (step_set_scale) is then 0.5: the patch at 8003AEC4 (recomp/
+// patches.txt) uses it to tell the game's own time step it runs at twice its frames per
+// second, and any site in recomp/steps.txt is halved. The CPU is made twice as fast too
+// (clock_set_cpu_scale), so a frame's work takes the same share of its shorter frame.
 //
 // SFASSAULT_FPS_AT=<seconds> waits until that much virtual time has passed before
 // switching, so that a replay reaches a scene in the same state at both rates (menus are
