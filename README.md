@@ -6,7 +6,8 @@ the game's PowerPC code to C with [gcn-recomp](https://github.com/ethannicholas/
 > [!IMPORTANT]
 > **This repository contains no game code or data.** You need your own copy of the game.
 > The build reads your disc image and produces the recompiled code on your machine; none
-> of it is ever committed or distributed.
+> of it is ever committed or distributed. This is an independent fan project, not
+> affiliated with or endorsed by Nintendo or Namco; see [Legal](#legal).
 
 ## Status
 
