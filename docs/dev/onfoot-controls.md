@@ -60,18 +60,24 @@ main.dol addresses (so the same in every scene):
 | Address | What |
 |---|---|
 | `0x802A2B60` + 0x48 × player | +0: the player's pilot object (`PILOT(FOX)` and so on). The same object while the pilot sits in a vehicle |
-| `0x802A6620` + 0xA0 × player | +0: the object the player's camera follows; +0x10: its yaw as a 3×4 matrix (yaw = atan2(m[0], m[2])) |
+| `0x802A6620` + 0xA0 × player | +0: the object the player's camera follows (the pilot or vehicle in versus, a camera object of its own in a story mission); +0x10: its yaw as a 3×4 matrix (yaw = atan2(m[0], m[2])) |
+| `0x80386B04`, `0x8038593C` | the game is paused: the first set, the second clear |
 
 A game object has its name (a string, or `NULL`) at +0x1C and its update function at +0x20;
 the top byte of +4 says what kind of object it is (5 a pilot, 6 an Arwing). A pilot's update
 is `0x8007871C`. A pilot's +0x100 is the vehicle it rides (0 on foot), the byte at +0x136 the profile's
 controller setting (0 Single Stick, 1 R Button Run, 2 Dual Stick) and its +0x370 the aim pitch, as a sine (positive up).
 
-**The player's mode** (`src/game_mode.h`): on foot when the camera follows the pilot; in a
-vehicle when it follows the pilot's vehicle, an Arwing for kind 6 (both the all-range and the
-on-rails Arwing of mission 1) and taken to be a Landmaster for kind 7. A parked object of kind
-7 sits in versus on Katina Outpost beside one of kind 6, but no Landmaster has been seen with
-a player in it yet. Anything else (menus, the pause screen, a cutscene's camera) is no mode.
+**The player's mode** (`src/game_mode.h`): on foot when the pilot rides nothing; in a vehicle,
+an Arwing for kind 6 (both the all-range and the on-rails Arwing of mission 1) and taken to be
+a Landmaster for kind 7. A parked object of kind 7 sits in versus on Katina Outpost beside one
+of kind 6, but no Landmaster has been seen with a player in it yet. While the game is paused
+(`0x80386B04` set, `0x8038593C` clear, the same in story and versus) there is no mode, nor
+without a pilot (the title and menus).
+
+The camera's table, `0x802A6620`, is no guide to the mode: in versus each entry is the
+player's pilot or vehicle, but in a story mission on foot the camera follows a camera object
+of its own.
 `SFASSAULT_MODELOG=1` prints each player's mode as it changes.
 
 ## What the port adds
