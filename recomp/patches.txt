@@ -39,3 +39,20 @@
 8000DE38 { uint32_t sfassault_retrace_ticks(void); c->cr[0] = CMPS((int32_t)c->r[3], -(int32_t)sfassault_retrace_ticks()); }
 8000DE44 { uint32_t sfassault_retrace_ticks(void); c->r[0] = c->r[3] - sfassault_retrace_ticks(); }
 8000DE50 { uint32_t sfassault_retrace_whole(void); c->r[0] = c->r[3] + sfassault_retrace_whole(); }
+
+# Skip the intro (issue #41, src/skip_intro.cpp). The logo task's step from its state 1 to
+# 2 (once its file is loaded) goes to its last state, 15, with the setting on.
+800111C0 { extern uint32_t sfa_logos_next_state(uint32_t); ST32((c->r[31] + (uint32_t)52), sfa_logos_next_state(c->r[0])); }
+# The flow's state 3 starts a movie: the opening one the first time after boot, which the
+# setting can leave out (the flow then loads the title at once).
+8000F19C { extern int sfa_skip_boot_movie(void); if (!sfa_skip_boot_movie()) { c->lr = 0x8000F1A0u; fn_800C2E18(c); } }
+
+# Skip cutscenes at once (issue #41, src/cutscenes.cpp). With the setting on, a Start press
+# a cutscene can't act on yet is kept until it can. The movie task, every frame it runs:
+800C327C { extern void sfa_movie_frame(uint32_t, uint32_t); sfa_movie_frame(c->r[3], LD32(0x8029A8C0u)); c->r[0] = LD32((c->r[3] + (uint32_t)84)); }
+# where it tests Start,
+800C3374 { extern uint32_t sfa_movie_start(uint32_t, uint32_t); c->r[0] = sfa_movie_start(c->r[31], c->r[0] & 0x1000u); SET_CR0(c->r[0]); }
+# and how many frames it must have played first: 30, or 1 with the setting on.
+800C3398 { extern int32_t sfa_movie_skip_after(void); c->cr[0] = CMPS((int32_t)c->r[0], sfa_movie_skip_after()); }
+# A scene the game plays itself, where it tests Start each frame.
+800ABE38 { extern uint32_t sfa_scene_start(uint32_t, uint32_t); c->r[0] = sfa_scene_start(c->r[30], c->r[0] & 0x1000u); SET_CR0(c->r[0]); }
