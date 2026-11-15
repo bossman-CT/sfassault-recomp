@@ -73,6 +73,33 @@ const char* name(Controls c) {
     }
 }
 
+// The title and its menus are m2.rel (module 6), whose menu task (update at 0x11B9C into the
+// module's code) keeps the screen it shows in the byte at +0x50 -- 0x5B the title waiting
+// for Start, 0x5D the main menu, 0x5A and 0x5C, 0x5E and 0x5F coming and going -- and a 1 at
+// +0x88 while that screen takes input. Found by logging the task through the title, the
+// main menu, player select and back (see docs/dev/exit-to-desktop.md). The task is found
+// through the task tree (0x802B2900: first task at +0, next at +0x18, update at +0x20) and
+// the SDK's module list (0x800030C8: id at +0, next at +4, section table at +0x10).
+FrontEnd front_end() {
+    constexpr uint32_t kModules = 0x800030C8, kTasks = 0x802B2900;
+    constexpr uint32_t kMenusModule = 6, kMenuUpdate = 0x11B9C;
+    uint32_t m = peek(kModules), code = 0;
+    for (int n = 0; m && n < 64 && !code; n++, m = peek(m + 4))
+        if (peek(m) == kMenusModule) code = peek(peek(m + 0x10) + 8) & ~1u;  // section 1
+    if (!code) return FrontEnd::Other;
+    uint32_t t = peek(kTasks);
+    for (int n = 0; is_object(t) && n < 512; n++, t = peek(t + 0x18)) {
+        if (peek(t + kObjUpdate) != code + kMenuUpdate) continue;
+        if (peek(t + 0x88) != 1) return FrontEnd::Other;
+        switch (peek(t + 0x50) >> 24) {
+        case 0x5B: return FrontEnd::Title;
+        case 0x5D: return FrontEnd::MainMenu;
+        default: return FrontEnd::Other;
+        }
+    }
+    return FrontEnd::Other;
+}
+
 const char* name(Mode m) {
     switch (m) {
     case Mode::OnFoot: return "on foot";

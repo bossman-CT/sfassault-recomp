@@ -22,4 +22,10 @@ enum class Controls { Unknown, SingleStick, DualStick, RButtonRun };
 Controls controls_of(int player);
 const char* name(Controls c);
 
+// The front end's screen, while it takes input: the title ("Press Start") or the main menu
+// after it (Single Mode, VS Mode, Options, Bonus Game). Other for anything else, the menus
+// behind the main menu and the moments a screen comes or goes included.
+enum class FrontEnd { Other, Title, MainMenu };
+FrontEnd front_end();
+
 }  // namespace game_mode
