@@ -18,8 +18,20 @@ attachment:
 Addresses, sizes, function names and short descriptions of what the game does are fine.
 Screenshots and short clips of the running game to show a bug are fine.
 
-CI checks every pull request for disc images and large binary files, but it can't catch
-everything, so reviewers will reject anything that looks like game data.
+`tools/check_no_game_data.py` catches the common cases:
+- disc images, and the game's own file formats
+- memory-card files
+- frame dumps and recompiled code
+- anything from `rom/`, `saves/` or `build/`
+- large binaries
+
+CI runs it on every pull request. Turn it on for your own commits too, once per clone:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+It can't catch everything, so reviewers will reject anything that looks like game data.
 
 ## Picking up work
 
