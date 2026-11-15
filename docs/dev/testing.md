@@ -46,6 +46,27 @@ crash, and the game's error line is shown). The frame comparison needs Pillow
 
 A visual fix should show up as `CHANGED` in the places it was meant to, and nowhere else.
 
+## Playthrough review: mark it now, look later
+
+While playing, press **F9** (or click the right stick on a controller) whenever something
+looks wrong. "Marked" flashes at the top of the window and the moment goes into the run's
+recording. Markers don't change a replay: a recording with them replays exactly as it would
+without them. Afterwards:
+
+```powershell
+.\tools\review.ps1 saves\inputs\20261115-100834            # or just the stamp
+.\tools\review.ps1 20261115-100834 -IndexOnly              # list the markers, replay nothing
+.\tools\review.ps1 20261115-100834 -Every 60 -Stride 0.1 -Scale 2
+```
+
+It replays the recording hidden, silent and as fast as the PC allows, and saves, under
+`build\review\<stamp>\`, a `marker_NN\` folder per marker (from 5 s before it to 2 s after,
+every 0.25 s, named by the offset: `+0.00s` is the marker), an `overview\` frame every 30 s
+across the whole run, and `index.txt`, which lists the markers with their times. Times are
+the game's own clock since boot, which stands still while the menu is open. The frames are
+drawn with your `settings.txt` (a copy, so nothing writes back to it) at `-Scale` (1 by
+default). A long playthrough takes a while: a replay runs a few times faster than real time.
+
 ## Comparing two builds at one moment
 
 For a closer look than the regression check, replay one stretch with frame dumps on each
