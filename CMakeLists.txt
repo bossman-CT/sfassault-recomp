@@ -33,6 +33,7 @@ gcn_add_game(
   REL_SYMBOLS ${CMAKE_SOURCE_DIR}/analysis/rels
   # Game-specific runtime settings, installed from static initializers.
   SOURCES ${CMAKE_SOURCE_DIR}/src/widescreen.cpp ${CMAKE_SOURCE_DIR}/src/frame_rate.cpp
+          ${CMAKE_SOURCE_DIR}/src/game_mode.cpp ${CMAKE_SOURCE_DIR}/src/controls.cpp
   # The game's native rate; to be confirmed per mode (issue #7).
   FPS 60)
 
