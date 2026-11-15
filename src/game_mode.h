@@ -1,5 +1,5 @@
 // What each player is controlling right now: on foot, an Arwing, a Landmaster, or nothing
-// (menus, the pause screen, cutscenes the camera leaves the player for, loading). Read from
+// (the title and menus, the pause screen, loading). Read from
 // guest memory, so it is what the game itself is doing; see docs/dev/onfoot-controls.md for
 // where it comes from.
 //
