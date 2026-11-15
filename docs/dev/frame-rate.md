@@ -91,7 +91,16 @@ the repository.
 
 - **Menus.** Cursor movement and repeat step per frame, so from boot a 120 fps replay of
   `fortuna` goes into Name Entry and User Settings instead of the briefing. Playing live,
-  the cursor would move at twice the speed.
+  a held direction would repeat twice as fast.
+  - The two runs part at 36 s, on Select Player. At 60 the cursor rests on "New User"
+    and the player then picks "Cody"; at 120 it has gone one entry further, to "Guest".
+    A held direction repeats sooner, so the repeat delay is counted in frames.
+  - Store histograms over the menu stretch (32–36 s) at both rates give 22 frame-driven
+    integer sites outside the time-step functions. Scaled as steps, they don't fix the
+    cursor, and they break rendering (black and green blocks), so the repeat counter is
+    not among them.
+  - Next, find the cursor index in RAM (`GCN_RAM_DUMP_AT` either side of a move), then
+    the code that moves it (`GCN_WATCH_ADDR`). The repeat delay will be next to it.
 - **The loading screen and briefing before mission 1:** at 106 s the 120 run already shows
   MISSION START, while the 60 run is still on the loading screen.
 - The player's firing and aiming (see the hit counts), Fortuna's surface, the boss, other
