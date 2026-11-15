@@ -1,12 +1,12 @@
 # Status and roadmap
 
-**Current state: mission 1 loads and plays, at 60 fps.** Milestone 0
+**Current state: mission 1 can be finished, and mission 2 plays, at 60 fps.** Milestone 0
 is done apart from the frame-rate measurements. The Windows build compiles 7,650 recompiled
 functions from `main.dol` and 21 of the 23 modules (`m7` and `m009` wait on #22). The game
-initializes the SDK, links its modules with `OSLink`, takes keyboard input past its first
-dialog, shows the title screen, creates a save on the emulated memory card, opens User
-Settings and runs the mission 1 briefing and mission, played with a DS4 through DS4Windows.
-Finishing mission 1 is next.
+initializes the SDK, links its modules with `OSLink`, saves to the emulated memory card, and
+plays mission 1 from the briefing through the boss (fixed in #42: the FPU's non-IEEE mode)
+into mission 2, played with a DS4 through DS4Windows. An in-game menu (F1), widescreen and
+players 2–4 are in. Later missions and versus mode are next to test.
 
 ## Reference disc
 
@@ -51,7 +51,7 @@ Everything the recompiler needs to know about the game's executable.
 ## Milestone 2: First mission
 
 - [x] Mission 1's briefing and mission load and play
-- [ ] Finish mission 1, start to end, including cutscenes
+- [x] Finish mission 1, start to end, including cutscenes (played through the boss into mission 2 on the #42 fix)
 - [ ] No crashes or hangs over a full run
 - [ ] Compare against Dolphin and record any visual differences
 
@@ -102,3 +102,4 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 
 - Modules `m7` and `m009` aren't built, because they share module ID 11 with `m8` (#22).
 - System-font text has almost no space between words (#25).
+- On Fortuna, enemies and obstacles fade in late, and the central tower appears late (#28).
