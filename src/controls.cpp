@@ -15,10 +15,14 @@
 // afresh every update, so it takes effect at once. The input log records the flipped pad, so
 // a replay plays back what the game saw whatever the switches say now.
 //
+// On foot with Dual Stick, Controls > On foot > Aiming = Modern (onfoot_modern.cpp) rebuilds the
+// C-stick before the flip.
+//
 // SFASSAULT_MODELOG=1 prints each player's mode and controller setting as they change.
 #include "game_mode.h"
 #include "input_ports.h"
 #include "menu.h"
+#include "onfoot_modern.h"
 #include "settings.h"
 
 #include <cstdio>
@@ -85,13 +89,17 @@ void filter(int port, PadState& p) {
         g_last[port] = m;
         g_last_controls[port] = c;
     }
+    // Modern (onfoot_modern.cpp) rebuilds the C-stick first, up on the right stick being up on
+    // the C-stick, so the flip below means the same with either scheme.
+    const Controls c = m == Mode::OnFoot || m == Mode::Landmaster ? game_mode::controls_of(port) : Controls::Unknown;
+    onfoot_modern::apply(port, p, m == Mode::OnFoot && c == Controls::DualStick);
     if (!p.connected) return;
     switch (m) {
     case Mode::OnFoot:
-        if (s_flip_onfoot) flip_aim(p, game_mode::controls_of(port));
+        if (s_flip_onfoot) flip_aim(p, c);
         break;
     case Mode::Landmaster:
-        if (s_flip_landmaster) flip_aim(p, game_mode::controls_of(port));
+        if (s_flip_landmaster) flip_aim(p, c);
         break;
     case Mode::Arwing:
         if (s_flip_arwing) p.stick_y = flip(p.stick_y);

@@ -34,6 +34,7 @@ gcn_add_game(
   # Game-specific runtime settings, installed from static initializers.
   SOURCES ${CMAKE_SOURCE_DIR}/src/widescreen.cpp ${CMAKE_SOURCE_DIR}/src/frame_rate.cpp
           ${CMAKE_SOURCE_DIR}/src/game_mode.cpp ${CMAKE_SOURCE_DIR}/src/controls.cpp
+          ${CMAKE_SOURCE_DIR}/src/onfoot_modern.cpp
   # The game's native rate; to be confirmed per mode (issue #7).
   FPS 60)
 
