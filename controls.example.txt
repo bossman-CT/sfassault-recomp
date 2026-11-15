@@ -30,17 +30,21 @@
 #gyro_sensitivity = 1      # 1: turning at 100 degrees a second is full deflection
 #gyro_deadzone = 2         # turns slower than this many degrees a second do nothing
 #gyro_smoothing = 0.03     # seconds of smoothing; 0 for none
-#gyro_hold = none          # or a button to aim only while it's held: l1, lefttrigger, ...
+#gyro_hold = none          # or a button to aim only while it's held: l1 (it does nothing
+                           # by default), lefttrigger, ...
 #gyro_horizontal = yaw     # yaw: turn the controller; roll: tilt it like a wheel
 #gyro_invert_x = off
 #gyro_invert_y = off       # on: tilting up pushes the stick down (flight controls)
 
 # ---- Remapping ----------------------------------------------------------------------------
-# <GameCube control> = <source>. A control you bind from "gamepad" loses its default on
-# that port, so these two lines swap A and B on port 1:
-#A = gamepad b
-#B = gamepad a
-# "none" takes a default away, to free a button (for gyro_hold, say):
+# <GameCube control> = <source>. On that port, a GameCube control you bind from "gamepad"
+# loses its default button, and a button you bind loses its default job, so a remap never
+# presses two things at once. These three lines put A on Circle, B on Cross and X on
+# Square, on port 1 only:
+#A = gamepad circle
+#B = gamepad cross
+#X = gamepad square
+# "none" takes a GameCube control's default away:
 #Z = none
 #
 # GameCube controls: A B X Y Z L R start dpad_up dpad_down dpad_left dpad_right,
