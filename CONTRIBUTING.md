@@ -39,6 +39,13 @@ everything, so reviewers will reject anything that looks like game data.
 5. Every patch in `recomp/patches.txt` needs a comment saying what it fixes.
 6. Update [docs/status.md](docs/status.md) when you finish a roadmap item.
 
+## Testing
+
+You rarely need to play through the game to test a change. Every run is recorded and
+replays exactly: see [docs/dev/testing.md](docs/dev/testing.md) for saved routes, playing
+on from them, and `tools\regress.ps1`, which replays every route and reports any frame that
+changed or any crash.
+
 ## Project-specific or upstream?
 
 Anything that isn't specific to Star Fox Assault, such as a GX rendering bug, an audio
