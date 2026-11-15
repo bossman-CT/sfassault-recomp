@@ -19,9 +19,11 @@ disc/
 # disc and must never be committed. The trailing slash keeps build.ps1 and build.sh tracked.
 build*/
 saves/
-# The player's own choices, written by the in-game menu.
+# The player's own choices: settings.txt written by the in-game menu, controls.txt by hand
+# (controls.example.txt is the tracked sample).
 settings.txt
 settings.txt.tmp
+controls.txt
 analysis/out/
 analysis/all.s
 tools/dtk
