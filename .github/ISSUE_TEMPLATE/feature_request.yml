@@ -2,6 +2,10 @@ name: Feature request
 description: Suggest an enhancement, such as a graphics option, control scheme or quality-of-life change.
 labels: ["enhancement"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        The project can't ship anything from the game itself, such as textures, music or a built game. Features that load files players supply themselves are fine.
   - type: textarea
     id: what
     attributes:

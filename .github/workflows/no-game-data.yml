@@ -13,7 +13,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python tools/check_no_game_data.py
+      - name: The result
+        run: python tools/check_no_game_data.py
+      # A file added in one commit and deleted in a later one isn't in the result, but it
+      # would still be in the history, so check what each commit adds or changes too.
+      - name: Each commit
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          cp tools/check_no_game_data.py "$RUNNER_TEMP/check.py"
+          for c in $(git rev-list --reverse "$BASE..$HEAD"); do
+            git checkout -q "$c"
+            if ! git diff-tree --no-commit-id --name-only -r -z --diff-filter=ACMR "$c" \
+                | xargs -0 -r python "$RUNNER_TEMP/check.py"; then
+              echo "::error::Commit $c adds game data. It has to be removed from the branch's history, not only deleted in a later commit."
+              exit 1
+            fi
+          done

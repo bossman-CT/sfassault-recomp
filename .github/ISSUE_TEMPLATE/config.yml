@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Bug in the shared GameCube runtime (gcn-recomp)
-    url: https://github.com/ethannicholas/gcn-recomp/issues
-    about: Rendering, audio or hardware problems that would affect any game belong upstream.
+  - name: Questions, ideas and impressions
+    url: https://github.com/bossman-CT/sfassault-recomp/discussions
+    about: Ask or share in Discussions. Bugs, including ones in the shared gcn-recomp runtime, go in a bug report here.
