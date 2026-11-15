@@ -72,7 +72,8 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [x] In-game menu (Dear ImGui), opened with F1, Esc, a controller's Back or L + R + Start,
       with settings saved to `settings.txt` (see `docs/dev/menu.md`)
 - [ ] Graphics: internal resolution, anti-aliasing, VSync, fullscreen and window modes
-      (internal resolution and fullscreen are in the menu)
+      (internal resolution, fractional or matched to the window, and fullscreen are in the
+      menu)
 - [x] Widescreen: projection, HUD placement and culling (`--aspect=16:9`, or Graphics >
       Aspect ratio in the menu; see `docs/dev/widescreen.md`)
 - [ ] High and unlocked frame rates, from the game's per-frame steps (`recomp/steps.txt`)
