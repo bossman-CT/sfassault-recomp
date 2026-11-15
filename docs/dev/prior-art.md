@@ -370,7 +370,7 @@ names or hashes, which need no license but are polite to credit.
 | Text fix (`SU_SSIZE`/`SU_TSIZE` coordinate scale) | xSNAIRZx | MIT | As above. | #9 |
 | Windows/clang compile fixes and SDL cache validation | xSNAIRZx | MIT | As above. | #8, #9 |
 | `GCN_THREAD_WATCH`, richer MMU fatal, `GCN_RAM_DUMP` | xSNAIRZx | MIT | As above. | #9 |
-| Aspect and viewport math, widescreen projection scale, z-freeze plane, fractional scale, FXAA and sharpening | xSNAIRZx `gx/` | MIT | "Widescreen and internal-resolution approach after xSNAIRZx/star-fox-assault-recomp (MIT)." | #11, #10 |
+| Aspect and viewport math, widescreen projection scale, z-freeze plane, fractional scale, FXAA and sharpening | xSNAIRZx `gx/` | MIT | "Widescreen and internal-resolution approach after xSNAIRZx/star-fox-assault-recomp (MIT)." | #11, #10, #31 |
 | Culling for widescreen | prime-recomp `patches.txt` (frustum hook pattern) | MIT | None for the idea. | #11 |
 | 30/60 fps pattern: pacing patches, `steps.txt`, `rate_sites.py`, `compare_runs.py` | bluestorm-recomp | MIT, Copyright Ethan Nicholas | "Frame-rate method and tooling from [bluestorm-recomp](https://github.com/ethannicholas/bluestorm-recomp) by Ethan Nicholas (MIT)." Keep the notice on copied scripts. | #12 |
 | Disc overlay (`GCN_MODS_DIR`, same-size files) | xSNAIRZx | MIT | As above. | M5 mod loader (no issue yet) |

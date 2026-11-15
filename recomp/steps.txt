@@ -1,0 +1,21 @@
+# Per-frame steps of GF7E01, for running above 60 fps (issue #12). "ADDR OPERAND [power]",
+# see gcn-recomp docs/diagnostics.md, "Finding a game's per-frame steps".
+#
+# None are listed. The game steps most of its world by a time step it derives from its
+# frames per second every frame (fn_8003AEB0), and the patch at 8003AEC4 in patches.txt
+# makes that 120 at 120 fps; see docs/dev/frame-rate.md. A per-site list of 239 steps found
+# in mission 1's flight was tried before that patch existed. On top of it those steps
+# scale twice whatever already follows the time step, and the HUD's hit counter came out
+# garbled, so they are not used. tools/find_steps.py and the store histograms that found
+# them are how to find what still steps per frame (the menus' cursors, for one).
+#
+# Never scale these:
+# - Integer increments that hang mission 1 at 120 fps when taken every other frame (found
+#   by bisecting with GCN_STEP_SKIP): 800D7CAC 800D7E30 8016B73C 8018967C
+# - The SDK (0x8012D438-0x8015B000, and from 0x801E8D48): the VI retrace count at 8013FC14,
+#   taken every other frame, leaves VIWaitForRetrace waiting forever.
+# - Time-driven sites (as many runs a second at 120 as at 60; the sound library, timers):
+#   80012E48 80012E68 80023F0C 80023F24 80023F2C 80023F34 80023F4C 80023F5C
+#   80027F04 80027F44 80027F54 80027F64 80052760 800529B4 800DE9E0 800DEA08
+#   800FA104 8010B168 8010B1E4 80122820 80122DBC 80122DDC 80122DFC 8016A840
+#   8016B050 8018BA24 8018BC6C 8018C638 8018CC50

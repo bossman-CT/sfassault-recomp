@@ -72,7 +72,8 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [x] In-game menu (Dear ImGui), opened with F1, Esc, a controller's Back or L + R + Start,
       with settings saved to `settings.txt` (see `docs/dev/menu.md`)
 - [ ] Graphics: internal resolution, anti-aliasing, VSync, fullscreen and window modes
-      (internal resolution and fullscreen are in the menu)
+      (internal resolution, fractional or matched to the window, and fullscreen are in the
+      menu)
 - [x] Widescreen: projection, HUD placement and culling (`--aspect=16:9`, or Graphics >
       Aspect ratio in the menu; see `docs/dev/widescreen.md`)
 - [ ] High and unlocked frame rates, from the game's per-frame steps (`recomp/steps.txt`)
@@ -80,6 +81,8 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [ ] Controls: per-controller remapping, keyboard and mouse, mouse and gyro aiming,
       rumble, several controllers for versus
 - [ ] Audio: separate music, effects and voice volume
+- [x] Audio quality: a clean 32-to-48 kHz step, the DSP's own voice filters, and an optional
+      Enhanced resampling (Audio > Quality; see `docs/dev/audio.md`)
 
 ## Milestone 5: Enhancements, cheats and mods
 
@@ -92,6 +95,9 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [ ] Mod loader for audio and other asset replacements
 - [ ] Speedrun tools: in-game timer and mission splits
 - [ ] Developer tools: FPS and frame-time overlay, object viewer, free camera
+- [ ] Online versus, delay-based lockstep (#36). Phase 1 found that two instances fed the same
+      inputs stay identical, at any internal resolution and aspect ratio
+      ([netplay.md](dev/netplay.md)). Phases 2–4 (localhost, internet, menu) are still to do
 
 ## Milestone 6: Other versions
 

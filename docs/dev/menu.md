@@ -463,7 +463,7 @@ match what the runtime does today (2x internal scale, 4:3, VSync off).
 | Rendering | Internal resolution (`render_set_internal_scale`, 1x to 8x); anti-aliasing; shader cache status | up | M4 |
 | Aspect ratio | Output aspect (4:3, 16:9, 16:10, 21:9, window), replacing the fixed 4:3 letterbox | up | M4 #11 |
 | Aspect ratio | Widescreen projection; HUD placement (centered 4:3, stretched, at the edges); culling margin | here | M4 #11 |
-| Frame rate | Target rate (native, 60, 120, 144, unlimited) through `recomp/steps.txt` and `step_set_scale` | up (mechanism), here (which modes allow what) | M4 #12 |
+| Frame rate | Target rate (native, 60, 120, 144, unlimited) through `recomp/steps.txt` and `step_set_scale`. Done: 60 / 120 (`graphics.frame_rate`, docs/dev/frame-rate.md) | up (mechanism), here (which modes allow what) | M4 #12 |
 | Upscaling | FSR, then DLSS where motion vectors allow; sharpness | up | M4 #13 |
 | Statistics overlay | FPS, frame time (shortcut to the same toggles in Developer) | up | M5 |
 

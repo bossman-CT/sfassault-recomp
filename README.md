@@ -18,7 +18,8 @@ readable menus. There's no packaged release yet: you build it yourself from your
 
 **Works today:**
 - Native Windows build, no emulator
-- Any internal resolution (`--scale=N`) and fullscreen (F11 or Alt+Enter)
+- Any internal resolution (`--scale=N`, fractions such as `2.25` too), or the window's own
+  (`--scale=window`, so a 1440p or 4K screen is drawn natively), and fullscreen (F11 or Alt+Enter)
 - Keyboard and up to four game controllers through SDL, one per port, with remapping, a
   PlayStation-style face-button layout and gyro aiming ([Controls](#controls))
 
@@ -89,7 +90,9 @@ On Linux or macOS:
 
 The game is `build/sfassault.exe` (`build/sfassault` elsewhere). It finds the disc image
 it was built from, so it needs no arguments. `--scale=N` sets the internal resolution
-multiplier, `--aspect=16:9` turns on widescreen, and `--fullscreen` starts in fullscreen.
+multiplier (`2.25` works too), `--scale=window` draws at the window's resolution and follows
+it, `--aspect=16:9` turns on widescreen, and `--fullscreen` starts in fullscreen. The menu's
+Graphics page has the same settings.
 While playing, **F11** or **Alt+Enter**
 toggles fullscreen and **Esc** quits.
 

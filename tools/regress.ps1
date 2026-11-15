@@ -10,6 +10,7 @@ a frame that changes, or a replay that stops before the route's end (a crash), i
   .\tools\regress.ps1                  # all routes
   .\tools\regress.ps1 -Route fortuna   # some routes
   .\tools\regress.ps1 -Update          # accept the current frames as the new baseline
+  .\tools\regress.ps1 -Set audio.quality=enhanced   # with a setting changed, against the same baseline
 
 The first run of a route, or any run with -Update, records its baseline. Baselines live in
 saves\regress\<route>, the latest frames in build\regress\<route>, and side-by-sides of
@@ -21,7 +22,8 @@ param(
     [int]$Every = 120,
     [switch]$Update,
     [int]$Scale = 1,
-    [int]$TimeoutMin = 30
+    [int]$TimeoutMin = 30,
+    [string[]]$Set      # key=value, passed to the game as --set
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'route-common.ps1')
@@ -49,7 +51,7 @@ foreach ($name in $Route) {
     # settings.txt (an aspect ratio, say).
     $gameArgs = @("--replay=saves\routes\$name", '--hidden', '--fast', '--no-input-log', "--scale=$Scale",
                   "--settings=build\regress\$name\settings.txt",
-                  "--dump-dir=build\regress\$name", "--dump-every=$Every")
+                  "--dump-dir=build\regress\$name", "--dump-every=$Every") + @($Set | Where-Object { $_ } | ForEach-Object { "--set=$_" })
     $err = Join-Path $cur 'stderr.txt'
     $start = Get-Date
     $p = Start-Process -FilePath $GameExe -ArgumentList $gameArgs -WorkingDirectory $ProjectRoot -PassThru -NoNewWindow `
