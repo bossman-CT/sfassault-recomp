@@ -26,7 +26,8 @@ then real time), and the controller is yours when it runs out. Getting there tak
 over a quarter of the route's length: fast-forward runs at about 3.5x real time, limited by
 the game and the rendering, which still run in full so the replay stays exact. Playing on is recorded as a new run, so `route.ps1 save` it under a
 new name to make a longer route. Saves made while playing on go to the route's own copy of
-the memory card, not your real one.
+the memory card, not your real one. Add `-KeepSave` to make that your real memory card when
+you quit, for example to keep a mission you just finished; the old card is backed up first.
 
 ## Regression check: did a change break anything?
 

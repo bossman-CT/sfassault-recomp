@@ -23,6 +23,28 @@ function Format-Frames([int]$Frames) {
     '{0}:{1:D2}' -f [int][math]::Floor($s / 60), ($s % 60)
 }
 
+# Playing on from a route saves into the route's own copy of the memory card
+# (memcard_replay.raw), not saves\memcard_a.raw. This makes that copy the real card, after
+# backing the real one up, but only if the game wrote it after $Since and it differs from
+# the card the route started with.
+function Use-RouteSave([string]$Dir, [datetime]$Since) {
+    $card = Join-Path $Dir 'memcard_replay.raw'
+    $start = Join-Path $Dir 'memcard_a.raw'
+    $wrote = (Test-Path $card) -and (Get-Item $card).LastWriteTime -ge $Since
+    if (-not $wrote -or ((Test-Path $start) -and (Get-FileHash $card).Hash -eq (Get-FileHash $start).Hash)) {
+        'The game saved nothing new while you played, so your memory card is unchanged.'
+        return
+    }
+    $real = Join-Path $ProjectRoot 'saves\memcard_a.raw'
+    if (Test-Path $real) {
+        $backup = 'memcard_a.{0}.backup.raw' -f (Get-Date -Format 'yyyyMMdd-HHmmss')
+        Copy-Item $real (Join-Path $ProjectRoot "saves\$backup")
+        "Backed up your previous memory card to saves\$backup."
+    }
+    Copy-Item $card $real -Force
+    'Your memory card now has the progress you saved. Start the game normally to continue from it.'
+}
+
 function Assert-GameBuilt {
     if (-not (Test-Path $GameExe)) { throw "build\sfassault.exe not found: run .\build.ps1 first" }
 }
