@@ -60,6 +60,17 @@ Then do the same with the other build or setting into `out\b`, and run
 `python tools\frame_diff.py out\a out\b out\changes`. Settings that only change rendering,
 such as `GCN_TEXCOORD_SCALE=texture`, can be compared on the same build.
 
+## Determinism check: do two runs stay identical?
+
+```powershell
+.\tools\determinism.ps1 -Route fortuna -A '--scale=1' -B '--scale=4'
+```
+
+This replays a route in two instances at once, with their own arguments, and compares hashes
+of their guest memory every 60 frames (`GCN_STATE_HASH`). It reports `SAME`, or the first frame
+where they part and which megabytes of memory differ. Online play depends on this
+([netplay.md](netplay.md)).
+
 ## What stays on your machine
 
 Recordings, routes, baselines and frame dumps hold your inputs, memory card data and images
