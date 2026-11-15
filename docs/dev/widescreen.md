@@ -32,7 +32,18 @@ else stays centred at its own proportions. In missions:
 - the bomb and shield gauge (bottom left) and the hit counter (top right) go to the wide
   frame's corners;
 - the comm box crosses the centre's half, so it stays centred, and the portrait inside it stays
-  with it;
+  with it. In the cutscenes' wider comm box the portrait lies wholly in the left outer half,
+  but it lies on the box, so it stays with it too (see the pause menu, next);
+- the pause menu stays whole. In mission 2, on foot, the game draws its panel at the left
+  of the 4:3 frame (x 16 to 184), with the map to its right; in mission 1's Arwing stages
+  it is in the middle, with no map. The panel crosses the split, so it stays centred. The
+  timer's digits, the CONTINUE / QUIT highlight and four of the five medal flags lie wholly
+  in the left outer half, though, and the rule by position moved them out to the wide
+  frame's left edge, off the panel (issue #55). gcn-recomp keeps a draw lying on a centred
+  2D panel drawn before it centred with the panel, so they stay in their boxes. A panel is
+  a 2D shape lying wholly in the frame. In the space battle an untextured 2D draw (the
+  orange lines, it seems) spans most of the frame but reaches past its left edge, so it is
+  not one, and the gauge and the counter under it still move out;
 - labels over allies and lock-on brackets stay on their targets. The game places them with its
   4:3 projection, and the scene moved by the same map. By the same rule, though, a bracket
   lying wholly in the outer half of a side moves out with the HUD, an eighth of the 4:3
