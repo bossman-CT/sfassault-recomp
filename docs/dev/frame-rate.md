@@ -213,6 +213,58 @@ the repository.
 - **Sound.** It is driven by time and should be unaffected, but no 120 fps run has been
   listened to (all runs were silent).
 
+## Input latency
+
+From a press to the frame that shows it, measured in its three shares. The methods are
+gcn-recomp's (`docs/diagnostics.md`, "Input latency"); `tools/input_delay.py` makes the
+routes and reads the frame dumps. There is no interpolation at either setting: at 120,
+every frame shown is a game update of its own.
+
+**The game's own share** runs from the input being there to the game handing over the
+first frame that shows it. It was measured exactly by replay: a full stick-up injected at
+virtual time T (8 values of T across one frame), compared with the run without it.
+
+| | 60 setting | 120 setting |
+|---|---|---|
+| Flight (`fortuna`, 130 s) | 21–36 ms, 28 on average (1.7 frames of 16.7) | 10.5–18 ms, 14 on average (1.7 frames of 8.3) |
+| On foot (mission 2, 233 s) | 54–83 ms, 68 on average (2 frames of 33) | 27–42 ms, 34 on average (2 frames of 16.7) |
+
+The delay falls in a straight line as T moves through the frame, then jumps back by one:
+the game reads the controller once a frame and sees it current, so the SI's 120 Hz latch
+adds no stale step. Nothing on the guest's side adds a frame beyond the game's own loop,
+and the 120 setting halves this share.
+
+**The host's share** comes from `GCN_LATENCYLOG`: a cut route fast-forwarded, then live in
+a 960×720 window. Other sessions' game processes were running throughout.
+
+- **Controller sampling:** the host refreshes the controllers about every 4 ms, so the
+  guest reads them about 2 ms old on average.
+- **Frame end to swap:** about 1 ms at 60 in flight, and at 30 or 60 on foot. The swap
+  doesn't block.
+- **120 fps on the 120 Hz display (flight at 120):** the swap blocked for a refresh every
+  frame. A frame waited behind the one before, and frame end to swap took 16–20 ms (worst
+  about 40), with 116–117 frames a second. Borderless fullscreen at internal scale 5 did
+  the same: 23 ms, with the swap at 7.8 ms. That is about one 120 Hz frame lost to the
+  compositor's line. Added up, flight came to about 36 ms plus the display at 120, against
+  about 31 ms plus the display at 60.
+- **Later runs differ:** the swap didn't block at 120, and the compositor reported 60 Hz.
+  By then the only display Windows listed was its stand-in (`WinDisc`, 2560×1440): the
+  monitor had been switched off or disconnected. Fullscreen at 60, scale 5 also gave
+  52–57 frames a second with an 18 ms swap, which is unexplained.
+
+**The display's share** (the compositor and scanout after the swap) isn't visible from the
+process; `vblank` in the log is its lower bound. Flushing the compositor after each swap,
+to keep the line empty, was tried. With the compositor at another rate than the frames it
+collapsed the frame rate to 49, so it is not done.
+
+Open:
+
+- Measure again with the 120 Hz monitor on and no other games running: windowed against
+  borderless fullscreen, with G-SYNC on and off.
+- A present that never queues: a DXGI flip-model swap chain with a waitable object,
+  presenting GL through `WGL_NV_DX_interop`. That is a gcn-recomp change.
+- The host could sample the controllers more often while a swap blocks.
+
 ## Finding what still steps per frame
 
 1. `python -I tools\find_steps.py build\gen` lists the static candidates (7,840): a load,
