@@ -101,6 +101,31 @@ and then wins over the file.
 The game's modes (`src/game_mode.h`) are there for aiming settings that differ by mode, such as
 the Modern on-foot scheme (#48).
 
+**Controls > On foot > Aiming: Modern** (`src/onfoot_modern.cpp`, off by default), with the
+game's Dual Stick controller setting, where the C-stick aims. With the others the game's own
+aiming stays. It rebuilds the C-stick from:
+
+- **the right stick**, read raw (`input_ports::raw`): a radial dead zone (0.08), then each axis's
+  part of the push (5% each, so pushing straight up doesn't drift sideways) through a response
+  curve (exponent 2) from the game's slowest turn up to a speed for each axis (0.75 and 0.6 of the
+  top speed). Holding the stick at the edge for 0.12 s raises that to the top speed over 0.25 s
+  (acceleration);
+- **the gyro** (on foot only, from the port's own gyro dead zone, smoothing and hold button) and
+  **the mouse** (port 1, captured while the menu is closed; left button R, right button X,
+  wheel A), by how far they move.
+
+It works in the game's terms, a share of the top speed each game frame, so the same settings hold
+in one-player and split-screen play and at any frame rate. The share maps onto the C-stick as
+the game's response does: nothing below 13, 14 for its slowest turn, 75 for the top speed. What a
+frame can't give is kept and given later: a mouse flick past the top speed a moment later, a
+turn slower than the game's slowest as pushes of three frames at that speed.
+
+Measured on the Dual Stick versus route, defaults, degrees a frame (Original in brackets):
+right stick at 30%: 0.51 (1.19); at 60%: 1.04 (2.66); all the way: 2.5, then 3.35 after the
+acceleration (3.36). Mouse, 10 counts an update: within 10% of 0.08 degrees a count, a little
+over. Mouse slower than the game's slowest turn: about 80% of it, the game's smoothing taking
+part of each push.
+
 ## Testing without the story
 
 Every recording so far is mission 1, which is all Arwing. Versus starts on foot: two
