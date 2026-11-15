@@ -72,7 +72,8 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [ ] In-game menu bar (Dear ImGui), opened with a hotkey or controller combo, with
       settings saved to a config file
 - [ ] Graphics: internal resolution, anti-aliasing, VSync, fullscreen and window modes
-- [ ] Widescreen: projection, HUD placement and culling
+- [x] Widescreen: projection, HUD placement and culling (`--aspect=16:9`; a menu toggle
+      comes with the menu; see `docs/dev/widescreen.md`)
 - [ ] High and unlocked frame rates, from the game's per-frame steps (`recomp/steps.txt`)
 - [ ] Upscaling: FSR first (vendor-neutral), DLSS after it if motion vectors are feasible
 - [ ] Controls: per-controller remapping, keyboard and mouse, mouse and gyro aiming,
