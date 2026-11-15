@@ -34,7 +34,9 @@ Everything the recompiler needs to know about the game's executable.
 - [x] Identify the SDK functions for `recomp/hle.txt` and `recomp/special_calls.txt`
 - [x] Find the scheduler's idle loop for `recomp/idle.txt`
 - [x] Check whether the disc ships any symbol or map files that would name functions
-- [ ] Confirm the game's native frame rate, per mode (menus, flight, on foot, multiplayer)
+- [ ] Confirm the game's native frame rate, per mode (menus, flight, on foot, multiplayer):
+      menus and flight 60, on foot and cutscenes 30 (`docs/dev/frame-rate.md`); multiplayer
+      not yet
 
 ## Milestone 1: Boots
 

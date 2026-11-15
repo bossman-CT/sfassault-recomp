@@ -1,9 +1,41 @@
 # Instruction patches for game-specific problems: one per line, each with a comment
 # saying what it fixes. See gcn-recomp's README for the format.
 
-# The game's logic rate (issue #12). fn_8003AEB0 runs every frame and derives the game's
-# time step from the frames per second it is told (sda-30252: 60 in play, 30 in some
-# cutscenes): the 16.16 time a frame adds to the game clock, the float time step and the
-# frame multiplier that hundreds of sites read. Reading it divided by the step scale makes
-# it 120 (or 60) at 120 fps, and leaves it as it is at 60, where the scale is 1.
-8003AEC4 c->r[6] = (uint32_t)(int32_t)((double)(int32_t)LD32((c->r[13] + (uint32_t)-30252)) / gcn_step_scale(0x8003AEC4u, 1) + 0.5);
+# The game's logic rate (issues #12, #59). The game keeps its frames per second in one
+# variable, sda-30252 (0x80385AF4: 60 in flight, 30 on foot and in some cutscenes), and
+# converts by it wherever time meets frames: its time step, derived every frame in
+# fn_8003AEB0, the frame budget the main loop paces itself by, and some 80 sites in main.dol
+# and the RELs that turn a duration or a rate into frames. These are all the game's stores
+# to it: r13-30252 in main.dol, 0x80380000 + 23284 in the RELs, or a register holding that
+# address. Each stores what src/frame_rate.cpp makes of the value instead: the value
+# divided by the step scale, so twice it at 120 fps and the game's own value at 60. Every
+# reader then follows. A store missed here is caught at the next frame and logged.
+8000E13C { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[13] + (uint32_t)-30252), sfassault_fps_store(c->r[6])); }  # main: 60 at boot
+8003AFEC { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[13] + (uint32_t)-30252), sfassault_fps_store(c->r[0])); }  # main: 30
+80057824 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[13] + (uint32_t)-30252), sfassault_fps_store(c->r[0])); }  # main: 60
+800AB8C4 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[13] + (uint32_t)-30252), sfassault_fps_store(c->r[0])); }  # main: 60 / n
+800C2E90 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[13] + (uint32_t)-30252), sfassault_fps_store(c->r[0])); }  # main: 60
+81810DD4 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[4] + (uint32_t)23284), sfassault_fps_store(c->r[5])); }  # m2.rel, the menus
+81831318 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[3] + (uint32_t)23284), sfassault_fps_store(c->r[0])); }  # m3.rel
+818858C8 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[3] + (uint32_t)23284), sfassault_fps_store(c->r[0])); }  # m5.rel, the briefing: 30
+81888040 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[4] + (uint32_t)23284), sfassault_fps_store(c->r[0])); }  # m6.rel: 30
+818CC9C4 { uint32_t sfassault_fps_store(uint32_t); ST32((c->r[6] + (uint32_t)23284), sfassault_fps_store(c->r[7])); }  # m9.rel
+818008AC { uint32_t sfassault_fps_store(uint32_t); ST32(c->r[4], sfassault_fps_store(c->r[7])); }  # m0.rel: 30, through r4
+81805F7C { uint32_t sfassault_fps_store(uint32_t); ST32(c->r[6], sfassault_fps_store(c->r[7])); }  # m10.rel, through r6
+818897C0 { uint32_t sfassault_fps_store(uint32_t); ST32(c->r[6], sfassault_fps_store(c->r[7])); }  # m8.rel (module 11): 30 as mission 2 loads, through r6
+818CCCB4 { uint32_t sfassault_fps_store(uint32_t); ST32(c->r[4], sfassault_fps_store(c->r[0])); }  # m9.rel, through r4
+
+# The game's retrace callback (fn_8000DE20) counts in 60 Hz retraces: a retrace counter
+# (sda-30272), a 16.16 clock (sda-30260, 1092 = 1/60 s), the frame budget the main loop
+# waits on (sda-30176: a frame adds 1/fps, each retrace pays 1/60 s back, down to -1/60 s),
+# and its frame meter (sda-30168, a second of 60 retraces). At 120 fps the VI retraces twice
+# a field, and a 120 Hz retrace paid for a 1/60 s frame: what runs at 30 in the original (on
+# foot, the boot logos) ran at 120 on a 60 time step, twice its speed (issue #59). These make
+# a retrace count for its share of a field (src/frame_rate.cpp): 546 at 120 fps, 1092 at 60,
+# and the counts taken on every second retrace at 120.
+8000DE20 { void sfassault_retrace(void); sfassault_retrace(); c->r[5] = LD32((c->r[13] + (uint32_t)-30272)); }
+8000DE2C { uint32_t sfassault_retrace_whole(void); c->r[5] = c->r[5] + sfassault_retrace_whole(); }
+8000DE30 { uint32_t sfassault_retrace_ticks(void); c->r[0] = c->r[4] + sfassault_retrace_ticks(); }
+8000DE38 { uint32_t sfassault_retrace_ticks(void); c->cr[0] = CMPS((int32_t)c->r[3], -(int32_t)sfassault_retrace_ticks()); }
+8000DE44 { uint32_t sfassault_retrace_ticks(void); c->r[0] = c->r[3] - sfassault_retrace_ticks(); }
+8000DE50 { uint32_t sfassault_retrace_whole(void); c->r[0] = c->r[3] + sfassault_retrace_whole(); }
