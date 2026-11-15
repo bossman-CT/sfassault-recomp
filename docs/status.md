@@ -92,6 +92,9 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [ ] Mod loader for audio and other asset replacements
 - [ ] Speedrun tools: in-game timer and mission splits
 - [ ] Developer tools: FPS and frame-time overlay, object viewer, free camera
+- [ ] Online versus, delay-based lockstep (#36). Phase 1 found that two instances fed the same
+      inputs stay identical, at any internal resolution and aspect ratio
+      ([netplay.md](dev/netplay.md)). Phases 2–4 (localhost, internet, menu) are still to do
 
 ## Milestone 6: Other versions
 
