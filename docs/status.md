@@ -69,11 +69,12 @@ in an in-game menu, off by default where it changes the original experience. The
 comes first because every later feature plugs into it. A menu framework that isn't
 specific to this game should go upstream to gcn-recomp so other ports can use it.
 
-- [ ] In-game menu bar (Dear ImGui), opened with a hotkey or controller combo, with
-      settings saved to a config file
+- [x] In-game menu (Dear ImGui), opened with F1, Esc, a controller's Back or L + R + Start,
+      with settings saved to `settings.txt` (see `docs/dev/menu.md`)
 - [ ] Graphics: internal resolution, anti-aliasing, VSync, fullscreen and window modes
-- [x] Widescreen: projection, HUD placement and culling (`--aspect=16:9`; a menu toggle
-      comes with the menu; see `docs/dev/widescreen.md`)
+      (internal resolution and fullscreen are in the menu)
+- [x] Widescreen: projection, HUD placement and culling (`--aspect=16:9`, or Graphics >
+      Aspect ratio in the menu; see `docs/dev/widescreen.md`)
 - [ ] High and unlocked frame rates, from the game's per-frame steps (`recomp/steps.txt`)
 - [ ] Upscaling: FSR first (vendor-neutral), DLSS after it if motion vectors are feasible
 - [ ] Controls: per-controller remapping, keyboard and mouse, mouse and gyro aiming,
