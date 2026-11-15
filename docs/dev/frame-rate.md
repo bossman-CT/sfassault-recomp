@@ -8,18 +8,21 @@ elsewhere in them. This page records what was found, the evidence, and what is l
 
 ## Turning it on
 
-```
-$env:SFASSAULT_FPS = '120'; .\build\sfassault.exe
-```
+In the menu: **Graphics > Display > Frame rate: 120** (`graphics.frame_rate` in
+`settings.txt`, or `--set=graphics.frame_rate=120` for one run). It is 60 by default. It can
+change while the game runs. The change takes effect at the next frame boundary and is
+logged in the input log like any setting the guest sees, so a replay switches where its
+recording did and stays exact.
 
-`src/frame_rate.cpp` reads it. At the first frame it does four things: it makes the VI
-retrace twice a field (`vi_set_rate(2)`), makes the CPU twice as fast
-(`clock_set_cpu_scale(2)`), sets the step scale to 0.5, and switches a replay to keying by
-virtual time. Two settings exist for testing:
+At 120, `src/frame_rate.cpp` does three things: it makes the VI retrace twice a field
+(`vi_set_rate(2)`), makes the CPU twice as fast (`clock_set_cpu_scale(2)`), and sets the
+step scale to 0.5. These environment variables are for testing:
 
-- `SFASSAULT_FPS_AT=<seconds>` switches only once that much virtual time has passed, so a
-  replay gets through the menus first. 100 s is mission 1's loading screen on the
-  `fortuna` route.
+- `SFASSAULT_FPS=120` forces 120 whatever the setting says, and replays by virtual time
+  (`input_replay_by_time`), so a route recorded at 60 lands its inputs at the same moments.
+- `SFASSAULT_FPS_AT=<seconds>`, with it, switches only once that much virtual time has
+  passed, so a replay gets through the menus first. 100 s is mission 1's loading screen
+  on the `fortuna` route.
 - `SFASSAULT_FRAMELOG=<file>` writes each presented frame's number and virtual time.
 
 ## How the game paces itself
