@@ -7,3 +7,10 @@
 # frame multiplier that hundreds of sites read. Reading it divided by the step scale makes
 # it 120 (or 60) at 120 fps, and leaves it as it is at 60, where the scale is 1.
 8003AEC4 c->r[6] = (uint32_t)(int32_t)((double)(int32_t)LD32((c->r[13] + (uint32_t)-30252)) / gcn_step_scale(0x8003AEC4u, 1) + 0.5);
+
+# Skip the intro (issue #41, src/skip_intro.cpp). The logo task's step from its state 1 to
+# 2 (once its file is loaded) goes to its last state, 15, with the setting on.
+800111C0 { extern uint32_t sfa_logos_next_state(uint32_t); ST32((c->r[31] + (uint32_t)52), sfa_logos_next_state(c->r[0])); }
+# The flow's state 3 starts a movie: the opening one the first time after boot, which the
+# setting can leave out (the flow then loads the title at once).
+8000F19C { extern int sfa_skip_boot_movie(void); if (!sfa_skip_boot_movie()) { c->lr = 0x8000F1A0u; fn_800C2E18(c); } }
