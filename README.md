@@ -9,6 +9,55 @@ the game's PowerPC code to C with [gcn-recomp](https://github.com/ethannicholas/
 > of it is ever committed or distributed. This is an independent fan project, not
 > affiliated with or endorsed by Nintendo or Namco; see [Legal](#legal).
 
+## Quick start (Windows)
+
+The built game can't be shared, because it's made from the disc's code. So everyone builds
+it on their own PC from their own disc. That takes one script, and the first build takes about
+BUILD_TIME.
+
+1. **Install the tools** (once), in PowerShell or Terminal:
+
+   ```powershell
+   winget install Git.Git Kitware.CMake Ninja-build.Ninja MartinStorsjo.LLVM-MinGW.UCRT Python.Python.3.13
+   ```
+
+2. **Get the source.** Don't use GitHub's ZIP download: it leaves out the recompiler
+   (a submodule).
+
+   ```powershell
+   git clone --recursive https://github.com/bossman-CT/sfassault-recomp.git
+   ```
+
+3. **Add your disc.** Dump **your own** *Star Fox Assault* (USA, `GF7E01`) and put the
+   `.iso` in the `rom\` folder ([how](#getting-your-game-files)). The build checks that it's
+   the supported version: revision 0, SHA-1 `065341b8575adea00fd0a75e389f135d32840423`.
+
+4. **Build.** Double-click **`build.bat`** in the project folder (or run
+   `.\tools\build.ps1`). It checks the tools and the disc first and says exactly what's
+   missing, then builds. After an update (`git pull --recurse-submodules`), run it again;
+   it only rebuilds what changed.
+
+5. **Play.** Start `build\sfassault.exe` with the project folder as the working folder:
+
+   ```powershell
+   cd sfassault-recomp
+   .\build\sfassault.exe
+   ```
+
+   **F1** or **Esc** (or a controller's Back/View button) opens the menu: graphics,
+   controls, and quitting. **F11** toggles fullscreen.
+
+**Where things live**, all in the project folder: your memory card (the game's saves) in
+`saves\memcard_a.raw`, what you change in the menu in `settings.txt`, your controls in
+`controls.txt` if you make one ([Controls](#controls)), and a recording of every run's
+input in `saves\inputs\`.
+
+**Add it to Steam:** in Steam, **Games > Add a Non-Steam Game to My Library > Browse**,
+pick `build\sfassault.exe`, and add it. Then right-click it, **Properties**, and set
+**Start In** to the project folder (for example `"C:\Games\sfassault-recomp\"`, quotes
+included). Steam fills in the `build` folder, where the game wouldn't find its saves and
+settings.
+
 ## Status
 
 **In progress: mission 1 is playable on Windows.** The game boots, saves to its memory
@@ -59,6 +108,9 @@ an in-game menu:
 3. Put it in [`rom/`](rom/README.md), for example `rom/game.iso`.
 
 ## Building
+
+Playing on Windows? The [Quick start](#quick-start-windows)'s `build.bat` does all of
+this. The details, for other platforms and for development:
 
 Requirements: CMake 3.20+, Ninja, Python 3, Git, and clang with C++20 support. SDL2 is
 built automatically on Windows the first time. On Windows, use
