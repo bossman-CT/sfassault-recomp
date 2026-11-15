@@ -158,6 +158,12 @@ same moments were compared, with the frame dumps paired by `SFASSAULT_FRAMELOG`.
     Fox in the same place.
   - At the next pause (1890 s) the mission clock reads 22 s in both.
   - The hit counts differ (4 against 2), as an open-loop replay drifts.
+  - The user then played 14 minutes more at 60 (2020–2888 s), on foot all along. Replayed
+    at 120 by virtual time, it runs at 59 frames a second against 30. It stays in step:
+    Fox is at the same place on the map at the same moments (2320, 2710 and 2830 s), with
+    the same objective count (TARGET 02).
+  - But the 120 run does consistently worse: fewer hits (3 against 7 by 2320 s), lower
+    health, and 2 lives left against 4 by 2830 s. Mission 1's flight shows fewer hits too.
 - **Loading is quicker at 120:** it is CPU work, and the CPU runs twice as fast. Mission 2's
   intro cutscene therefore starts a few seconds earlier, and the Start press that skips it
   lines the runs up again.
@@ -196,8 +202,14 @@ the repository.
 - **Cutscenes in missions** run at 60 (twice their 30) with the time step told 60; their
   speed and voice sync are not checked. The flight-to-Fortuna cutscene at 300 s was not
   reached in step.
-- **Not checked at 120:** the player's firing and aiming (see the hit counts), Fortuna's
-  surface, the boss, missions after 2, the Landmaster, and the Arwing in mission 2.
+- **Hits and damage at 120.** In both missions the 120 run scores fewer hits than the 60
+  run. On foot it also loses more health and lives. Either way the run stays in step with
+  the 60 run's progress. This may be the drift of an open-loop replay, or something that
+  still steps per frame: aiming, firing, or damage taken per frame of contact. Not yet told
+  apart. A closed test would be a fixed route (standing in one enemy's fire, or firing at
+  one target) compared at both rates.
+- **Not checked at 120:** Fortuna's surface, the boss, missions after 2, the Landmaster,
+  and the Arwing in mission 2.
 - **Sound.** It is driven by time and should be unaffected, but no 120 fps run has been
   listened to (all runs were silent).
 
