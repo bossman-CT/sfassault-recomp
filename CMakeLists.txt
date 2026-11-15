@@ -32,7 +32,7 @@ gcn_add_game(
   RELS ${SFASSAULT_REL_FILES}
   REL_SYMBOLS ${CMAKE_SOURCE_DIR}/analysis/rels
   # Game-specific runtime settings, installed from static initializers.
-  SOURCES ${CMAKE_SOURCE_DIR}/src/widescreen.cpp
+  SOURCES ${CMAKE_SOURCE_DIR}/src/widescreen.cpp ${CMAKE_SOURCE_DIR}/src/frame_rate.cpp
   # The game's native rate; to be confirmed per mode (issue #7).
   FPS 60)
 
