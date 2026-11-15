@@ -1,0 +1,38 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Star Fox Assault",
+  "system": "GameCube",
+  "type": "recomp",
+  "original": {
+    "region": "USA",
+    "revision": "Rev 0",
+    "sha1": "065341b8575adea00fd0a75e389f135d32840423"
+  },
+  "project": "sfassault-recomp",
+  "status": "in-progress",
+  "targets": [
+    "Windows"
+  ],
+  "toolchain": "gcn-recomp",
+  "approach": "Static recompilation of the PowerPC executable and its relocatable modules to C, linked against a runtime that stands in for the GameCube hardware",
+  "notes": "Boots, saves and plays mission 1 at 60 fps with sound and controller support on Windows. Widescreen, 120 fps, an in-game options menu and a build-from-your-disc launcher are in progress. No packaged release yet: build from source with your own disc.",
+  "tags": [
+    "Star Fox"
+  ],
+  "maintainers": [
+    {
+      "name": "bossman-CT",
+      "link": "https://github.com/bossman-CT"
+    }
+  ],
+  "links": [
+    {
+      "label": "Source",
+      "url": "https://github.com/bossman-CT/sfassault-recomp"
+    },
+    {
+      "label": "Discussions",
+      "url": "https://github.com/bossman-CT/sfassault-recomp/discussions"
+    }
+  ]
+}

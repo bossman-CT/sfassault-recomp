@@ -58,6 +58,12 @@ body:
       label: Logs and screenshots
       description: Paste the console output or attach a log file. Drag screenshots here.
       render: text
+  - type: textarea
+    id: recording
+    attributes:
+      label: Input recording (optional, very helpful)
+      description: |
+        Every run records your controller input in `saves/inputs/<date-time>/`. Attach that run's `inputs.txt` and say roughly how many minutes in the bug happened: we can replay your run exactly. **Don't attach `memcard_a.raw`**, which contains game data.
   - type: checkboxes
     id: legal
     attributes:
