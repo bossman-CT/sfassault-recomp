@@ -5,7 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting. **Don't attach or link game files or disc images.** Screenshots, short clips and logs are welcome.
+        Thanks for reporting. Screenshots, short clips and logs are welcome.
+
+        **Never attach or link game files.** That includes disc images, anything from `build/`, and anything from `saves/`: recordings, routes, the memory card (`memcard_a.raw`) and frame dumps all hold game data.
   - type: textarea
     id: what
     attributes:
@@ -28,6 +30,13 @@ body:
     attributes:
       label: Where in the game?
       placeholder: Mission 1, after the first cutscene / Versus menu / title screen
+  - type: textarea
+    id: when
+    attributes:
+      label: When in the run?
+      description: |
+        If your build has the mark-this-moment key, press it when the bug happens and paste the marker times the game prints. Otherwise, say roughly how many minutes into the run it happened.
+      placeholder: "Marked at 12:41 and 12:58"
   - type: input
     id: commit
     attributes:
@@ -35,6 +44,12 @@ body:
       description: Run `git rev-parse --short HEAD`, or give the release name.
     validations:
       required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: settings.txt
+      description: Paste your `settings.txt` (the in-game menu writes it beside the `saves/` folder), or say you haven't changed any settings. Add any command-line options you used, such as `--scale=4`.
+      render: text
   - type: dropdown
     id: version
     attributes:
@@ -56,20 +71,13 @@ body:
     id: logs
     attributes:
       label: Logs and screenshots
-      description: Paste the console output or attach a log file. Drag screenshots here.
-      render: text
-  - type: textarea
-    id: recording
-    attributes:
-      label: Input recording (optional, very helpful)
-      description: |
-        Every run records your controller input in `saves/inputs/<date-time>/`. Attach that run's `inputs.txt` and say roughly how many minutes in the bug happened: we can replay your run exactly. **Don't attach `memcard_a.raw`**, which contains game data.
+      description: Paste the console output in a code block, or attach a log file. Drag screenshots here.
   - type: checkboxes
     id: legal
     attributes:
       label: Checklist
       options:
-        - label: I haven't attached or linked any game files or disc images.
+        - label: I haven't attached or linked any game files, disc images, recordings, memory cards or frame dumps.
           required: true
         - label: I searched existing issues and this isn't a duplicate.
           required: true

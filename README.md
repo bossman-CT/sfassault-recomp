@@ -125,10 +125,10 @@ Tried it? Tell us how it went:
 - **Bugs:** open an [issue](../../issues/new/choose) with the bug report form.
 - **Questions, ideas and impressions:** post in [Discussions](../../discussions).
 
-Every run records your controller input in `saves/inputs/<date-time>/`, and a recording
-replays the run exactly, which is the fastest way for us to reproduce a bug. You can attach
-a run's `inputs.txt` to a bug report. **Don't attach `memcard_a.raw`**: memory card data
-includes game assets, such as the save icon.
+**Never attach game files to an issue.** That includes recordings and routes
+(`saves/inputs/`, `saves/routes/`), the memory card (`memcard_a.raw`) and frame dumps: they
+hold game data, such as the save icon and images of the game. Screenshots and short clips
+are fine. The bug report form asks when in your run the bug happened instead.
 
 ## Contributing
 
@@ -137,7 +137,8 @@ important rule is that **no game data, disc images, extracted files or generated
 can ever go into an issue or pull request.
 
 Issues labeled [`good first issue`](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-are a good place to start.
+are a good place to start, and [Where help is wanted](CONTRIBUTING.md#where-help-is-wanted)
+lists the bigger pieces we'd most like help with.
 
 ## Credits
 
@@ -154,6 +155,19 @@ are a good place to start.
 
 ## Legal
 
-This is an independent fan project, not affiliated with or endorsed by Nintendo or
-Bandai Namco. *Star Fox* is a trademark of Nintendo. The project's own code is under
-the [MIT license](LICENSE), which grants no rights in the game itself.
+This is an independent fan project. It is **not affiliated with, endorsed by or sponsored
+by Nintendo, Namco or Bandai Namco**.
+
+- **You need your own, legally obtained copy of the game**, dumped from a disc you own.
+  This project doesn't provide the game, and doesn't link to anywhere that does.
+- **This repository contains no game data:** no code, assets, disc images or extracted
+  files, only original code and documentation, with addresses and names that describe the
+  executable. The game's code is recompiled on your machine, from your disc.
+- **Don't share your build.** `build/` holds the game's recompiled code, and `saves/` holds
+  your memory card and recordings, so neither may be uploaded or passed on. The project
+  publishes no builds of the game.
+- *Star Fox* and *Star Fox Assault* are trademarks of Nintendo. They're used here only to
+  name the game this project ports. All other trademarks belong to their owners.
+
+The project's own code is under the [MIT license](LICENSE), which grants no rights in the
+game itself.
