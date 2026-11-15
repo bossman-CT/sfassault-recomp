@@ -45,7 +45,10 @@ foreach ($name in $Route) {
     $env:SDL_AUDIODRIVER = 'dummy'  # silent: the game still mixes its audio, nothing reaches the speakers
     # Relative to the project folder, where the game runs: Start-Process joins its arguments
     # with spaces and doesn't quote them, so a path with a space would split in two.
+    # The settings come from a file that isn't there, so the frames don't depend on this PC's
+    # settings.txt (an aspect ratio, say).
     $gameArgs = @("--replay=saves\routes\$name", '--hidden', '--fast', '--no-input-log', "--scale=$Scale",
+                  "--settings=build\regress\$name\settings.txt",
                   "--dump-dir=build\regress\$name", "--dump-every=$Every")
     $err = Join-Path $cur 'stderr.txt'
     $start = Get-Date

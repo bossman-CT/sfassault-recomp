@@ -1,0 +1,102 @@
+# Controls: copy this file to controls.txt beside the game (in the folder you run it from)
+# and remove the # in front of the lines you want. With no controls.txt, or with every line
+# commented out, the defaults below apply.
+#
+# Ports. Each game controller gets its own port, 1 to 4, in the order you connect them.
+# A port keeps its controller until you unplug it, and a controller you plug back in gets
+# its old port if that's free. The keyboard is always on port 1, with the first
+# controller. The game prints which controller went to which port when it starts.
+# Run `sfassault.exe --list-controls` to see your controllers' names and what each button
+# is called.
+#
+# Defaults: keyboard X = A, Z = B, C = X, S = Y, D = Z, Q = L, W = R, Return = Start,
+# arrows = stick, I J K L = D-pad. On a controller, "positional" layout: the bottom face
+# button is A, left is B, right is X, top is Y, R1/RB is Z, the triggers are L and R, the
+# left stick is the stick and the right stick is the C-stick.
+
+# ---- Settings for every port ------------------------------------------------------------
+# Lines here, before any [section], apply to every port.
+
+# Face buttons. "positional" (the default) keeps the GameCube's arrangement: on a DS4,
+# Cross is A, Square is B, Circle is X. "modern" makes the bottom button confirm and the
+# right one go back: Cross = A, Circle = B, Square = X, Triangle = Y.
+#layout = modern
+
+# ---- Gyro aiming (DS4, DualSense, Switch Pro) -------------------------------------------
+# Off by default. "stick" adds the controller's motion to the control stick, "cstick" to
+# the C-stick. Turning the controller pushes the stick as fast as you turn it, so holding
+# it still lets go.
+#gyro = stick
+#gyro_sensitivity = 1      # 1: turning at 100 degrees a second is full deflection
+#gyro_deadzone = 2         # turns slower than this many degrees a second do nothing
+#gyro_smoothing = 0.03     # seconds of smoothing; 0 for none
+#gyro_hold = none          # or a button to aim only while it's held: l1 (it does nothing
+                           # by default), lefttrigger, ...
+#gyro_horizontal = yaw     # yaw: turn the controller; roll: tilt it like a wheel
+#gyro_invert_x = off
+#gyro_invert_y = off       # on: tilting up pushes the stick down (flight controls)
+
+# ---- Remapping ----------------------------------------------------------------------------
+# <GameCube control> = <source>. On that port, a GameCube control you bind from "gamepad"
+# loses its default button, and a button you bind loses its default job, so a remap never
+# presses two things at once. These three lines put A on Circle, B on Cross and X on
+# Square, on port 1 only:
+#A = gamepad circle
+#B = gamepad cross
+#X = gamepad square
+# "none" takes a GameCube control's default away:
+#Z = none
+#
+# GameCube controls: A B X Y Z L R start dpad_up dpad_down dpad_left dpad_right,
+#   stick_x stick_y cstick_x cstick_y (a whole axis), stick_up stick_left... (one way)
+# Sources:
+#   gamepad <name>    the port's controller: a b x y (bottom, right, left, top), or
+#                     cross circle square triangle, l1 r1 l2 r2 l3 r3, share options ps,
+#                     lb rb lt rt ls rs view menu, dpup dpdown dpleft dpright,
+#                     leftx lefty rightx righty (up and right positive; add + or - for one
+#                     direction: lefty+), lefttrigger righttrigger
+#   key <name>        a key: X, Return, Space, "Left Shift"
+#   "<device>" button <n> / hat <n> up / axis <n>   any joystick, by the name
+#                     --list-controls prints (a wheel, pedals...)
+# Options after a source: deadzone <0 to 1>, gain <n>, threshold <0 to 1>, invert.
+#R = gamepad r1
+#Z = gamepad r2 threshold 0.3
+#stick_up = gamepad dpup
+
+# ---- One port --------------------------------------------------------------------------
+# After [port N], lines are that port's alone, and its settings win over the ones above.
+#[port 2]
+#layout = modern
+#gyro = cstick
+#A = gamepad cross
+
+# Which controller takes a port: auto (the next one to connect), none (keep the port
+# empty), or a name from --list-controls, "#2" for the second of two with that name.
+#[port 1]
+#device = "PS4 Controller"
+#[port 2]
+#device = none
+
+# A second player on the keyboard: plug port 2 in without a controller and give it keys.
+#[port 2]
+#connected = always
+#A = key Space
+#B = key "Left Shift"
+#start = key Tab
+#stick_up = key T
+#stick_down = key G
+#stick_left = key F
+#stick_right = key H
+
+# ---- One kind of controller -------------------------------------------------------------
+# [playstation] (or ps3, ps4, ps5), [xbox] (xbox360, xboxone), [nintendo] (switch, joycon):
+# for every port that kind of controller is on. A [port N] setting still wins.
+#[playstation]
+#layout = modern
+#gyro = stick
+#[xbox]
+#layout = positional
+
+# ---- Every port, after a [port] section --------------------------------------------------
+#[all]
+#gyro_deadzone = 3
