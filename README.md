@@ -19,7 +19,8 @@ readable menus. There's no packaged release yet: you build it yourself from your
 **Works today:**
 - Native Windows build, no emulator
 - Any internal resolution (`--scale=N`) and fullscreen (F11 or Alt+Enter)
-- Keyboard and game controllers through SDL
+- Keyboard and up to four game controllers through SDL, one per port, with remapping, a
+  PlayStation-style face-button layout and gyro aiming ([Controls](#controls))
 
 **Being worked on:** widescreen (#11), 120 fps (#12), an in-game options menu (#10), and a
 launcher so you don't need to build from source (#34).
@@ -91,6 +92,28 @@ it was built from, so it needs no arguments. `--scale=N` sets the internal resol
 multiplier, `--aspect=16:9` turns on widescreen, and `--fullscreen` starts in fullscreen.
 While playing, **F11** or **Alt+Enter**
 toggles fullscreen and **Esc** quits.
+
+## Controls
+
+The keyboard and the first controller play on port 1. Each controller you connect after it
+gets the next port, up to four, and keeps its port until it's unplugged. The game prints
+which controller went where when it starts.
+
+To change the controls, copy [`controls.example.txt`](controls.example.txt) to
+`controls.txt` next to where you run the game and uncomment what you want. Everything is
+per port, or for one kind of controller:
+
+- **Face buttons:** `layout = modern` makes the bottom button confirm and the right one go
+  back (Cross = A, Circle = B). The default, `positional`, keeps the GameCube's arrangement.
+- **Remapping:** any GameCube control from any button, key or joystick: `A = gamepad circle`.
+- **Gyro aiming** on a DS4, DualSense or Switch Pro controller: `gyro = stick`, with
+  sensitivity, dead zone, smoothing, invert and an optional hold-to-aim button.
+- **A second player on the keyboard:** `[port 2]` with `connected = always` and some keys.
+
+`sfassault.exe --list-controls` shows each controller's name and what each button is
+called. With DS4Windows running, the game can see your DS4 twice (the DS4 and the Xbox pad
+DS4Windows makes), on two ports. Close DS4Windows, or have it hide the DS4. With DS4Windows
+closed, the game reads the DS4 directly, gyro included.
 
 ## Testing and feedback
 
