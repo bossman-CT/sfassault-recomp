@@ -80,6 +80,8 @@ specific to this game should go upstream to gcn-recomp so other ports can use it
 - [ ] Controls: per-controller remapping, keyboard and mouse, mouse and gyro aiming,
       rumble, several controllers for versus
 - [ ] Audio: separate music, effects and voice volume
+- [x] Audio quality: a clean 32-to-48 kHz step, the DSP's own voice filters, and an optional
+      Enhanced resampling (Audio > Quality; see `docs/dev/audio.md`)
 
 ## Milestone 5: Enhancements, cheats and mods
 
