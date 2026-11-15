@@ -1,7 +1,39 @@
 # The enhancement menu: design
 
-Design for issue #10, the in-game menu every milestone 4 and 5 feature plugs into. Nothing
-here is built yet, and the game doesn't boot, so this is a plan to agree on before any code.
+Design for issue #10, the in-game menu every milestone 4 and 5 feature plugs into. It was
+written before any code; [What's built](#whats-built) says how much of it exists now.
+
+## What's built
+
+The core went into our gcn-recomp fork, as the design has it (upstream hasn't been asked
+yet), and this project adds nothing of its own so far.
+
+| Piece | State |
+|---|---|
+| Dear ImGui 1.91.9b, vendored in `third_party/imgui` with its license; SDL2 + OpenGL 3 backends | done |
+| Settings registry (`runtime/settings.h`): toggle, slider, choice; help, flags, `on_change`, `enabled_if`, `visible_if`, `while_on`, `on_guest_frame` | done |
+| `settings.txt`: only changed values, unknown keys kept, `--set=k=v`, `--settings=`, `--list-settings`, saved on close, 2 s after a change and at exit | done |
+| Menu registry (`runtime/menu.h`): buttons with a confirmation, page order | done |
+| Opening: F1, Esc, controller Back, L + R + Start held 1 s; Start closes | done |
+| Pause gate at the guest's frame boundary, clock re-anchored on resume, audio paused, rumble stopped | done |
+| Input capture on every port (the overlay is `input_ports`' filter): the game reads pads at rest; buttons held at close are kept from it until released | done |
+| Last frame shown again under the menu while the game is paused | done (kept by the overlay, not the renderer) |
+| `AffectsGuest` settings latched per frame and logged as `setting` lines (input log v5), applied by replays | done, but no setting uses it yet |
+| Pages: Game (Resume, Reset, Quit; menu settings), Graphics (fullscreen, internal resolution, aspect ratio), Audio (master volume), Developer (show developer options), Help | done |
+| Test switches `GCN_MENU_OPEN` and `GCN_MENU_SHOT` (gcn-recomp `docs/diagnostics.md`) | done |
+| Hotkeys, presets, search, menu opacity, mouse-cursor hiding, a font for 4K | planned |
+| `run_on_guest` (a menu button that writes guest memory, logged for replays) | planned |
+| Window mode choice, VSync, frame cap, music and effects volume, statistics | planned (stage 3) |
+| Controls page (#40), quality of life (#41), cheats, this game's own entries in `src/` | planned |
+| A `GCN_OVERLAY` CMake option | not done: the overlay is always built into the desktop executable |
+
+Notes from building it:
+
+- Aspect ratio turned out to be host-only: gcn-recomp's widescreen widens the picture in the
+  renderer and the game never sees it, so `graphics.aspect` changes live and isn't logged.
+- `tools\regress.ps1` now passes `--settings=` a file that doesn't exist, so a setting saved
+  on this PC (an aspect ratio, say) can't change the frames it compares.
+- The settings file sits in the working directory beside `controls.txt` and `saves/`.
 
 It is based on gcn-recomp at `9e93f1b` (the commit this repository pins) and on Ship of
 Harkinian's menu, which was read for its ideas only: none of its code is used or copied.

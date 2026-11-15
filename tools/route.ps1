@@ -10,12 +10,13 @@ through it and hands you the controller where it ends.
   .\tools\route.ps1 list
   .\tools\route.ps1 save <name>                       # the newest recording
   .\tools\route.ps1 save <name> -From saves\inputs\20261103-201727
-  .\tools\route.ps1 play <name> [-Fullscreen] [-Scale 4]
+  .\tools\route.ps1 play <name> [-Fullscreen] [-Scale 4] [-KeepSave]
   .\tools\route.ps1 info <name>
 
 Playing on from a route is recorded too, as a new run: save that as a new route to make a
 longer one. Progress saved in game while playing on from a route goes to the route's own
-copy of the memory card, not to saves\memcard_a.raw.
+copy of the memory card, not to saves\memcard_a.raw. Add -KeepSave to make it your real
+memory card when you quit (the old one is backed up first).
 
 Routes stay under saves\routes on your machine; saves\ is ignored by git.
 #>
@@ -25,6 +26,7 @@ param(
     [string]$From,
     [switch]$Fullscreen,
     [int]$Scale = 0,
+    [switch]$KeepSave,
     [switch]$Force
 )
 $ErrorActionPreference = 'Stop'
@@ -81,7 +83,9 @@ switch ($Command) {
         $gameArgs = @("--replay=saves\routes\$Name", '--fast-forward')  # relative: the game runs in the project folder
         if ($Fullscreen) { $gameArgs += '--fullscreen' }
         if ($Scale -gt 0) { $gameArgs += "--scale=$Scale" }
+        $since = Get-Date
         Push-Location $ProjectRoot
         try { & $GameExe @gameArgs } finally { Pop-Location }
+        if ($KeepSave) { Use-RouteSave $dir $since }
     }
 }

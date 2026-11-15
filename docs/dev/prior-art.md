@@ -152,10 +152,11 @@ Their `README.md`, `VALIDATION.md`, `RELEASE-NOTES.md` and `CREDITS.md` all list
 problems as unresolved. None of them gives a cause, and there are no issues filed.
 
 1. **The first boss disappears.** Described as a "first-boss visibility report". Nothing in
-   the repository explains it, and no change in the runtime diff targets it. We cannot say
-   whether it happens at 4:3 as well as in widescreen, or whether it is a rendering,
-   culling or game-logic problem. Compare against Dolphin at the same point (the M2 item) before
-   assuming it is ours or theirs.
+   the repository explains it, and no change in the runtime diff targets it. We had the
+   same bug: gcn-recomp ignored the non-IEEE floating-point mode the SDK sets, and the
+   boss's position overflowed to infinity ([boss-softlock.md](boss-softlock.md), #42).
+   It was game logic, not rendering, so it happens at any aspect ratio. Their copy of the
+   runtime most likely has the same gap.
 2. **A crash on an invalid current-thread pointer.** Also unexplained in prose. The runtime
    changes show what they chased:
    - an opt-in build that watches writes near the OS current-thread word at `0x800000E4` and
