@@ -1,10 +1,19 @@
 # 120 fps (issue #12)
 
-Status: **mission 1's flight runs at 120 fps at the game's own speed, but the menus don't
-yet.** It is off by default, and with it off the game is unchanged (the regression check
-reports SAME). One patch does the work: it tells the game's time step that it runs at
-120 frames a second. Menus still step per frame, so from boot a 120 fps replay goes
-elsewhere in them. This page records what was found, the evidence, and what is left.
+Status: **at the 120 setting, mission 1 plays at 120 fps at the game's own speed, from boot
+to the flight.** It is off by default, and with it off the game is unchanged (the
+regression check reports SAME). One patch does the work: it tells the game's time step that
+it runs at 120 frames a second. The front end's menus, loading screen and briefing keep the
+original rate, since they count frames the patch doesn't reach. This page records what was
+found, the evidence, and what is left.
+
+| Scene | Original | At 120 |
+|---|---|---|
+| Play (mission 1's flight) | 60 | 120 |
+| Cutscenes in missions | 30 | 60 |
+| Boot logos | 30 | 60 |
+| Title and menus (`m2.rel`, module 6) | 60 | 60 |
+| Loading screen and briefing (`m5.rel`, module 9) | 30 | 30 |
 
 ## Turning it on
 
@@ -14,15 +23,15 @@ change while the game runs. The change takes effect at the next frame boundary a
 logged in the input log like any setting the guest sees, so a replay switches where its
 recording did and stays exact.
 
-At 120, `src/frame_rate.cpp` does three things: it makes the VI retrace twice a field
-(`vi_set_rate(2)`), makes the CPU twice as fast (`clock_set_cpu_scale(2)`), and sets the
-step scale to 0.5. These environment variables are for testing:
+At 120, `src/frame_rate.cpp` does three things, except while the front end's menus or
+briefing are loaded: it makes the VI retrace twice a field (`vi_set_rate(2)`), makes the CPU
+twice as fast (`clock_set_cpu_scale(2)`), and sets the step scale to 0.5. It decides at each
+frame boundary from the guest's own module list (the SDK's at `0x800030C8`), so a replay
+switches at the same frames. These environment variables are for testing:
 
-- `SFASSAULT_FPS=120` forces 120 whatever the setting says, and replays by virtual time
+- `SFASSAULT_FPS=120` forces the 120 setting, and replays by virtual time
   (`input_replay_by_time`), so a route recorded at 60 lands its inputs at the same moments.
-- `SFASSAULT_FPS_AT=<seconds>`, with it, switches only once that much virtual time has
-  passed, so a replay gets through the menus first. 100 s is mission 1's loading screen
-  on the `fortuna` route.
+- `SFASSAULT_FPS_AT=<seconds>`, with it, holds off until that much virtual time has passed.
 - `SFASSAULT_FRAMELOG=<file>` writes each presented frame's number and virtual time.
 
 ## How the game paces itself
@@ -60,26 +69,29 @@ game's value at 60, so everything derived from it follows.
 
 ## Evidence
 
-Method: replay the `fortuna` route at 60 and at 120 fps (switching at 100 s), both by
-virtual time. Dump the frames each run shows at the same moments, using
-`SFASSAULT_FRAMELOG` and then gcn-recomp's `GCN_DUMP_FRAMES`, and compare them side by
-side.
+Method: replay the `fortuna` route at 60 and at 120 fps, both by virtual time. Dump the
+frames each run shows at the same moments, using `SFASSAULT_FRAMELOG` and then gcn-recomp's
+`GCN_DUMP_FRAMES`, and compare them side by side. Give each run its own copy of the route:
+a replay writes to a scratch copy of the memory card inside the route's folder, and two
+replays of one folder at once race on it. One such 60 fps run reached the title 20 s late.
 
-- **Without the patch** (VI rate only): everything at double speed. The 120 run reaches
-  Fortuna's surface by 230 s, while the 60 run is still in space until 310 s; then it
-  hits game over.
-- **With the patch**, 102–166 s, every 4 s:
-  - The radio lines on a fixed schedule appear at the same moments at both rates
-    ("Cornerian Army now commencing third volley…" at 130 s, "Andross's ships are being
-    destroyed…" at 134 s, "Krystal and Fox, hit the right…" at 146 s, "All right! Hit 'em
-    hard…" at 150 s).
-  - The camera, the planet and the fleets match.
-  - Lines triggered by events in the fight run a line apart for a while (114–126 s).
-  - The hit counter climbs more slowly at 120: 12 by 142 s against 50. The same inputs
+- **Without the patch** (VI rate only, switching at 100 s): everything at double speed.
+  The 120 run reaches Fortuna's surface by 230 s, while the 60 run is still in space until
+  310 s; then it hits game over.
+- **From boot, as shipped** (`SFASSAULT_FPS=120`), every 4–6 s from 20 to 152 s:
+  - **Title, menus, briefing and loading screen:** identical frames at the same moments.
+    The rate switches where the 60 run links and unlinks those modules (60 at 12 s, 120
+    at 41 s, 30 at 46 s, 120 at 95 s).
+  - **The flight:** the radio lines on a fixed schedule appear at the same moments at both
+    rates ("All ships! Avoid…" at 110 s, "Uh-oh! I'm in trouble" at 122 s, "Andross's ships
+    are being destroyed…" at 134 s, "Krystal and Fox, hit the right…" at 146 s, "All
+    right! Hit 'em hard…" at 152 s). The camera, the planet and the fleets match. Lines
+    triggered by events in the fight run at most a line apart in between.
+  - **The hit counter** climbs more slowly at 120: 11 by 152 s against 98. The same inputs
     don't hit the same enemies, so something in the player's aiming or firing may still
     step per frame, or it may just be the drift of an open-loop replay. Not yet told apart.
-  - After about 170 s the 120 run's player dies where the 60 run's didn't, and the runs
-    part.
+  - **After about 170 s** (seen with the switch at 100 s) the 120 run's player dies where
+    the 60 run's didn't, and the runs part.
 - **Before the patch**, a per-site list of 239 steps from the flight was built (below).
   With it, the script still ran twice as fast and the hit counter showed broken digits.
   On top of the patch it garbles the counter again, so it isn't used.
@@ -89,24 +101,23 @@ the repository.
 
 ## Not covered yet
 
-- **Menus.** Cursor movement and repeat step per frame, so from boot a 120 fps replay of
-  `fortuna` goes into Name Entry and User Settings instead of the briefing. Playing live,
-  a held direction would repeat twice as fast.
-  - The two runs part at 36 s, on Select Player. At 60 the cursor rests on "New User"
-    and the player then picks "Cody"; at 120 it has gone one entry further, to "Guest".
-    A held direction repeats sooner, so the repeat delay is counted in frames.
-  - Store histograms over the menu stretch (32–36 s) at both rates give 22 frame-driven
-    integer sites outside the time-step functions. Scaled as steps, they don't fix the
-    cursor, and they break rendering (black and green blocks), so the repeat counter is
-    not among them.
-  - Next, find the cursor index in RAM (`GCN_RAM_DUMP_AT` either side of a move), then
-    the code that moves it (`GCN_WATCH_ADDR`). The repeat delay will be next to it.
-- **The loading screen and briefing before mission 1:** at 106 s the 120 run already shows
-  MISSION START, while the 60 run is still on the loading screen.
-- The player's firing and aiming (see the hit counts), Fortuna's surface, the boss, other
-  missions, on foot and Landmaster, and cutscene and voice sync. None has been checked at
-  120.
-- Sound. It is driven by time and should be unaffected, but no 120 fps run has been
+- **Menus and briefing at 120.** They run at the original rate instead. At 120 the menus'
+  cursor repeat counted frames:
+  - From boot, a replay at 120 parted at 36 s on Select Player. The cursor went one entry
+    further, to "Guest" instead of "New User", and from there into Name Entry.
+  - The 22 frame-driven integer sites over that stretch, scaled as steps, didn't fix it,
+    and they broke rendering.
+  - At twice their rate, the loading screen and briefing ran 6 s ahead by the briefing's
+    first lines.
+- **Other front-end screens** (VS mode, Options, Bonus) are assumed to live in the same
+  module; not checked.
+- **The pause menu in a mission** runs at 120; its two entries have not been tried there.
+- **Cutscenes in missions** run at 60 (twice their 30) with the time step told 60; their
+  speed and voice sync are not checked. The flight-to-Fortuna cutscene at 300 s was not
+  reached in step.
+- **Not checked at 120:** the player's firing and aiming (see the hit counts), Fortuna's
+  surface, the boss, other missions, and on foot and Landmaster.
+- **Sound.** It is driven by time and should be unaffected, but no 120 fps run has been
   listened to (all runs were silent).
 
 ## Finding what still steps per frame
