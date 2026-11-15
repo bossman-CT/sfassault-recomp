@@ -9,7 +9,10 @@ each on its own branch and issue.
 - **Never commit game data.** No disc images, nothing extracted from the disc (`main.dol`,
   `.rel`, assets), nothing from `build/`, and no disassembly or decompiled code pasted from
   tools. Addresses, sizes, names and descriptions are fine. Run
-  `python tools/check_no_game_data.py` before committing.
+  `python tools/check_no_game_data.py` before committing, and enable the hook that runs it
+  for you (`git config core.hooksPath .githooks`). Never bypass it with `--no-verify`. Frame
+  dumps, recordings, routes and memory cards stay under `build/` and `saves/`; never attach
+  them to issues or PRs.
 - The user's disc image lives in `rom/` (ignored by git). Read it; never modify, move or
   upload it.
 - `gcn-recomp/` is our fork, bossman-CT/gcn-recomp, of ethannicholas/gcn-recomp. Change it

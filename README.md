@@ -10,9 +10,19 @@ the game's PowerPC code to C with [gcn-recomp](https://github.com/ethannicholas/
 
 ## Status
 
-**Early: it builds, but doesn't boot yet.** The game's code is analyzed and recompiled,
-and the Windows build links; getting it to the title screen is next. See [docs/status.md](docs/status.md) for the roadmap
-and the [issues](../../issues) for what's being worked on.
+**In progress: mission 1 is playable on Windows.** The game boots, saves to its memory
+card, and plays mission 1 at 60 fps, with sound, talking portraits, controller support and
+readable menus. There's no packaged release yet: you build it yourself from your own disc
+(below). See [docs/status.md](docs/status.md) for the roadmap and known problems, and the
+[issues](../../issues) for what's being worked on.
+
+**Works today:**
+- Native Windows build, no emulator
+- Any internal resolution (`--scale=N`) and fullscreen (F11 or Alt+Enter)
+- Keyboard and game controllers through SDL
+
+**Being worked on:** widescreen (#11), 120 fps (#12), an in-game options menu (#10), and a
+launcher so you don't need to build from source (#34).
 
 ## Planned features
 
@@ -81,6 +91,18 @@ it was built from, so it needs no arguments. `--scale=N` sets the internal resol
 multiplier, `--aspect=16:9` turns on widescreen, and `--fullscreen` starts in fullscreen.
 While playing, **F11** or **Alt+Enter**
 toggles fullscreen and **Esc** quits.
+
+## Testing and feedback
+
+Tried it? Tell us how it went:
+
+- **Bugs:** open an [issue](../../issues/new/choose) with the bug report form.
+- **Questions, ideas and impressions:** post in [Discussions](../../discussions).
+
+Every run records your controller input in `saves/inputs/<date-time>/`, and a recording
+replays the run exactly, which is the fastest way for us to reproduce a bug. You can attach
+a run's `inputs.txt` to a bug report. **Don't attach `memcard_a.raw`**: memory card data
+includes game assets, such as the save icon.
 
 ## Contributing
 
