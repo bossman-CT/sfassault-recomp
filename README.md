@@ -21,8 +21,10 @@ BUILD_TIME.
    winget install Git.Git Kitware.CMake Ninja-build.Ninja MartinStorsjo.LLVM-MinGW.UCRT Python.Python.3.13
    ```
 
-2. **Get the source.** Don't use GitHub's ZIP download: it leaves out the recompiler
-   (a submodule).
+2. **Get the source.** Open a new PowerShell window where you want the game (for example
+   `cd C:\Games`) and run the line below. It makes a `sfassault-recomp` folder there: the
+   project folder. Don't use GitHub's ZIP download, which leaves out the recompiler (a
+   submodule).
 
    ```powershell
    git clone --recursive https://github.com/bossman-CT/sfassault-recomp.git
@@ -40,9 +42,13 @@ BUILD_TIME.
 5. **Play.** Start `build\sfassault.exe` with the project folder as the working folder:
 
    ```powershell
-   cd sfassault-recomp
+   cd C:\Games\sfassault-recomp
    .\build\sfassault.exe
    ```
+
+   Double-clicking `sfassault.exe` inside `build\` also starts it, but keeps its saves and
+   settings in `build\` instead. A Steam shortcut (below) or a Windows shortcut with
+   **Start in** set to the project folder avoids that.
 
    **F1** or **Esc** (or a controller's Back/View button) opens the menu: graphics,
    controls, and quitting. **F11** toggles fullscreen.
