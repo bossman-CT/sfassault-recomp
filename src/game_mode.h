@@ -10,7 +10,9 @@
 
 namespace game_mode {
 
-enum class Mode { None, OnFoot, Arwing, Landmaster };
+// OnWing: riding on the wing of an Arwing somebody else flies (the plasma cannon gunner), where
+// the pilot aims as on foot.
+enum class Mode { None, OnFoot, Arwing, Landmaster, OnWing };
 
 // Player 0 to 3: the controller on port 1 to 4 in versus, player 0 in the story.
 Mode of_player(int player);

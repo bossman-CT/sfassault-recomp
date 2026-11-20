@@ -70,10 +70,21 @@ controller setting (0 Single Stick, 1 R Button Run, 2 Dual Stick) and its +0x370
 
 **The player's mode** (`src/game_mode.h`): on foot when the pilot rides nothing; in a vehicle,
 an Arwing for kind 6 (both the all-range and the on-rails Arwing of mission 1) and taken to be
-a Landmaster for kind 7. A parked object of kind 7 sits in versus on Katina Outpost beside one
+a Landmaster for kind 7, and on a wing for an Arwing that is not flown by a player (below). A parked object of kind 7 sits in versus on Katina Outpost beside one
 of kind 6, but no Landmaster has been seen with a player in it yet. While the game is paused
 (`0x80386B04` set, `0x8038593C` clear, the same in story and versus) there is no mode, nor
 without a pilot (the title and menus).
+
+**Riding on a wing** (story mission 3, Fox on Falco's Arwing, shooting the plasma cannon): the pilot's
+vehicle is an Arwing too (kind 6), so it read as Arwing until #78, but it is not the one the player
+flies: its update function is `0x80055A4C`, a flown Arwing's `0x8004AE38`. Measured by replaying the
+mission 3 recording to the wing ride and then scripting the sticks (`GCN_INPUT`): the **C-stick** aims
+(Dual Stick profile; the control stick barely moves the aim), and C-stick up *lowers* the aim
+(`pilot +0x370`), as on foot with the game's default Invert Y. So the mode is `OnWing` ("on a
+wing"), and **Flip aim up/down on foot** flips it too, with the same stick per controller setting.
+The other two controller settings were not tried on the wing; the pilot's own update drives the aim
+there, so they are taken to follow the on-foot rule. Which of the game's two Invert Y settings
+(Pilot or Arwing) the wing reads was not told apart: both were the default.
 
 The camera's table, `0x802A6620`, is no guide to the mode: in versus each entry is the
 player's pilot or vehicle, but in a story mission on foot the camera follows a camera object
@@ -82,7 +93,7 @@ of its own.
 
 ## What the port adds
 
-**Controls > Aiming** in the menu (F1): **Flip aim up/down on foot**, **in the Arwing** and
+**Controls > Aiming** in the menu (F1): **Flip aim up/down on foot** (also riding a wing), **in the Arwing** and
 **in the Landmaster**, all off by default. Each flips the stick that aims in that mode on top of
 the game's own Invert Y, which is per profile and reachable only from the title screen's
 Options; these can change mid-mission (`src/controls.cpp`, through `input_ports::add_filter`,

@@ -9,6 +9,11 @@
 // the profile's controller setting: 0 Single Stick, 1 R Button Run, 2 Dual Stick (seen with
 // each, and the same in the story as in versus).
 //
+// Riding on a wing (story mission 3, Fox on Falco's Arwing) also has the pilot's vehicle be an
+// Arwing, kind 6, but not the one the player flies: its update function is 0x80055a4c, a flown
+// Arwing's 0x8004AE38 (measured with the pilot on the wing and flying the same mission). The
+// pilot there aims as on foot, with the controller setting's stick, the C-stick in Dual Stick,
+// and the same sign: the C-stick up lowers the aim, as on foot with the game's default Invert Y.
 // On foot: the pilot rides nothing. In a vehicle: kind 6 is the Arwing (all-range and on
 // rails, seen in mission 1), kind 7 is taken to be the Landmaster (a parked one in versus on
 // Katina Outpost has it). While the game is paused (0x80386B04 set, 0x8038593C clear; both
@@ -24,7 +29,7 @@ namespace {
 
 constexpr uint32_t kPlayers = 0x802A2B60, kPlayerStride = 0x48;
 constexpr uint32_t kPaused = 0x80386B04, kRunning = 0x8038593C;
-constexpr uint32_t kPilotUpdate = 0x8007871C;
+constexpr uint32_t kPilotUpdate = 0x8007871C, kWingArwingUpdate = 0x80055A4C;
 constexpr uint32_t kObjKind = 0x04, kObjUpdate = 0x20, kPilotVehicle = 0x100, kPilotControls = 0x134;
 constexpr uint8_t kKindArwing = 6, kKindLandmaster = 7;
 
@@ -46,7 +51,7 @@ Mode of_player(int player) {
     if (!vehicle) return Mode::OnFoot;
     if (!is_object(vehicle)) return Mode::None;
     switch (peek(vehicle + kObjKind) >> 24) {
-    case kKindArwing: return Mode::Arwing;
+    case kKindArwing: return peek(vehicle + kObjUpdate) == kWingArwingUpdate ? Mode::OnWing : Mode::Arwing;
     case kKindLandmaster: return Mode::Landmaster;
     default: return Mode::None;
     }
@@ -103,6 +108,7 @@ FrontEnd front_end() {
 const char* name(Mode m) {
     switch (m) {
     case Mode::OnFoot: return "on foot";
+    case Mode::OnWing: return "on a wing";
     case Mode::Arwing: return "Arwing";
     case Mode::Landmaster: return "Landmaster";
     default: return "none";

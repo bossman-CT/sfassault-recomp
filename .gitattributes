@@ -5,6 +5,7 @@
 # PowerShell and batch scripts run best with CRLF on Windows.
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
+*.bat text eol=crlf
 
 *.bin binary
 *.png binary

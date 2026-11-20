@@ -63,6 +63,10 @@ Everything the recompiler needs to know about the game's executable.
 - [ ] Versus multiplayer, including 4-player split screen
 - [ ] Unlockables work: medals, versus content and bonus extras
 - [ ] Builds and runs on Linux and macOS
+- [x] Build from your own disc with one script: `build.bat` checks the tools and the disc,
+      then builds (#34)
+- [ ] A release ZIP whose launcher fetches the tools itself, so players install nothing by
+      hand (#34)
 
 ## Milestone 4: Enhancement menu and core options
 

@@ -65,7 +65,11 @@ foreach ($line in [IO.File]::ReadLines($log)) {
         if ($line -match '^# gcn-recomp input log v(\d+)') { $version = [int]$Matches[1] }
         elseif ($line.StartsWith('# mark ')) {
             $f = $line.Split(' ')
-            $marks += [pscustomobject]@{ N = [int]$f[2]; Frame = [uint32]$f[5]; Time = [double]$f[6] / $TB }
+            $t = [double]$f[6] / $TB
+            # Older logs list one click twice (a pad and Steam Input's virtual pad both reported it): skip a mark
+            # within half a second of the last.
+            if ($marks -and ($t - $marks[-1].Time) -lt 0.5) { continue }
+            $marks += [pscustomobject]@{ N = $marks.Count + 1; Frame = [uint32]$f[5]; Time = $t }
         } elseif ($line.StartsWith('# end ')) {
             $f = $line.Split(' ')
             if ($f.Count -ge 5) { $endTick = [double]$f[4] }
