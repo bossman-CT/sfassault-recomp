@@ -56,3 +56,18 @@
 800C3398 { extern int32_t sfa_movie_skip_after(void); c->cr[0] = CMPS((int32_t)c->r[0], sfa_movie_skip_after()); }
 # A scene the game plays itself, where it tests Start each frame.
 800ABE38 { extern uint32_t sfa_scene_start(uint32_t, uint32_t); c->r[0] = sfa_scene_start(c->r[30], c->r[0] & 0x1000u); SET_CR0(c->r[0]); }
+
+# Draw distance (issues #76, #28, src/draw_distance.cpp). The game draws a model only within
+# a scene-wide distance of the camera (sda-29516, 0x80385DD4) plus an offset (sda-29512),
+# fading it out over the last fifth. These are all its stores to the two: fn_80071054 works
+# them out every frame, fn_80072930 sets them for a view as it draws it, and fn_80071874
+# and fn_80071E58 set them up. Each stores the value times the Draw distance setting; at
+# Original the value itself.
+80071218 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[1].d)); }
+8007121C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[0].d)); }
+80071D14 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[2].d)); }
+80071D18 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[1].d)); }
+80071F00 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[3].d)); }
+80071F04 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[2].d)); }
+80072978 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[1].d)); }
+8007297C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[0].d)); }

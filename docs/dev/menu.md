@@ -461,6 +461,7 @@ match what the runtime does today (2x internal scale, 4:3, VSync off).
 |---|---|---|---|
 | Display | Window mode (windowed, borderless, fullscreen); display; VSync; frame cap | up | M4 |
 | Rendering | Internal resolution (`render_set_internal_scale`, 1x to 8x); anti-aliasing; shader cache status | up | M4 |
+| Rendering | Draw distance: Original, 2x to 8x, Unlimited (`graphics.draw_distance`, docs/dev/draw-distance.md) | here | #76 |
 | Aspect ratio | Output aspect (4:3, 16:9, 16:10, 21:9, window), replacing the fixed 4:3 letterbox | up | M4 #11 |
 | Aspect ratio | Widescreen projection; HUD placement (centered 4:3, stretched, at the edges); culling margin | here | M4 #11 |
 | Frame rate | Target rate (native, 60, 120, 144, unlimited) through `recomp/steps.txt` and `step_set_scale`. Done: 60 / 120 (`graphics.frame_rate`, docs/dev/frame-rate.md) | up (mechanism), here (which modes allow what) | M4 #12 |

@@ -38,6 +38,7 @@ gcn_add_game(
           ${CMAKE_SOURCE_DIR}/src/skip_intro.cpp
           ${CMAKE_SOURCE_DIR}/src/cutscenes.cpp
           ${CMAKE_SOURCE_DIR}/src/exit_to_desktop.cpp
+          ${CMAKE_SOURCE_DIR}/src/draw_distance.cpp
   # The game's native rate; to be confirmed per mode (issue #7).
   FPS 60)
 
