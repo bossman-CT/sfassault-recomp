@@ -72,3 +72,32 @@ voices may sound a little louder or fuller than before.
 
 The Dolby Pro Logic II sound option hasn't been looked at. The HLE mixes the outputs that
 a DPL2 voice names, the same way Dolphin does.
+
+## Star Wolf in mission 3 (issue #77)
+
+The report was that Star Wolf's portraits don't move their mouths while their lines play.
+Checked on a replay of the playthrough that was marked at those lines (Enhanced audio, 120 fps),
+with a trace of every AX frame's buses and of every read the face code makes of the level:
+
+- **The voice does reach AuxA.** During Wolf's, Leon's and Panther's lines the AuxA left
+  buffer peaks at 8,000 to 15,000, the same as during Krystal's line in the same mission, and
+  the guest's copy at 0x802D2590 follows it. Between lines both are 0. These voices have the
+  same mixer-control form as the briefing voices and send to the same buses, so they are not
+  a streamed or differently mixed route.
+- **The comm-box portraits move their mouths.** The game has one object that calls
+  `fn_800C3D54` in flight and in the Star Wolf cutscenes alike (its calls come from
+  0x800B3ED4 and 0x800AA968, its scale at `obj+0x38` is 1.0). Its level follows the line:
+  about 0 in the pauses, 0.4 to 1.4 while the voice is loud. The portrait's mouth is shut in
+  the pauses and open on the loud syllables. Wolf, Leon and Panther move as much as Krystal
+  does. Wolf's mouth is a smirk, so its movement is small and easy to miss.
+- **The pilots in the cockpits don't move.** In the cutscenes where Star Wolf appears
+  (their intro, and the later ones with Wolf and Panther), the camera is on their ships and
+  each pilot's head is visible through the canopy. Nothing calls `fn_800C3D54` for those
+  heads; only the comm-box portrait does, so their mouths are not driven from the sound at
+  all. That is how the game is set up, not something the audio emulation changes. This is
+  the only thing seen that matches "their mouths don't move". It hasn't been compared with
+  a console.
+
+So no audio change was needed. If the report meant the cockpit heads, they'd need a mouth
+driven from the same level by a new patch, which makes them move where the console's game
+doesn't; that is a separate, optional enhancement.
