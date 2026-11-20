@@ -12,8 +12,9 @@ the game's PowerPC code to C with [gcn-recomp](https://github.com/ethannicholas/
 ## Quick start (Windows)
 
 The built game can't be shared, because it's made from the disc's code. So everyone builds
-it on their own PC from their own disc. That takes one script, and the first build takes about
-BUILD_TIME.
+it on their own PC from their own disc. That takes one script. The first build took a
+minute on an 8-core Ryzen 7 9800X3D; expect several minutes on a slower PC, plus a few more
+the very first time while it builds SDL2 (once per PC).
 
 1. **Install the tools** (once), in PowerShell or Terminal:
 
