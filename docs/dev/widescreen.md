@@ -44,11 +44,21 @@ else stays centred at its own proportions. In missions:
   a 2D shape lying wholly in the frame. In the space battle an untextured 2D draw (the
   orange lines, it seems) spans most of the frame but reaches past its left edge, so it is
   not one, and the gauge and the counter under it still move out;
-- labels over allies and lock-on brackets stay on their targets. The game places them with its
-  4:3 projection, and the scene moved by the same map. By the same rule, though, a bracket
-  lying wholly in the outer half of a side moves out with the HUD, an eighth of the 4:3
-  frame's width off its target at 16:9. None of the frames checked showed it, but it follows
-  from the rule.
+- the markers the game places over a point of the scene stay on it: the aiming reticle (a circle
+  and brackets), the lock-on brackets, the wingmen's name labels, the bonus popups. The game
+  places them with its 4:3 projection and the scene moved by the same map. The rule by position
+  alone would have anchored them as they crossed the split, though: the reticle jumped an
+  eighth of the frame outward there, its circle and its brackets crossing at different
+  frames and tearing apart for a few, and a label left its ship (issue #79).
+  `src/widescreen.cpp` lists their textures (`render_set_wide_centred_textures`, by the content
+  hashes the draw log's `t0=` shows), and their draws are never anchored. The list is the
+  textures that were anchored on one side and not on the other during replays of a space-battle
+  route and a long playthrough (about 170,000 frames, several missions), found by tallying each texture's class per draw; a marker added by a
+  later mission that jumps is a texture to add (log with `GCN_DRAWLOG`);
+- the reticle stays inside the 4:3 frame's width, so it does not reach the wide frame's
+  edges: the game keeps it there itself (its centre stayed between about 24 and 616 of 640 across
+  in 25,000 frames of the space battle), and what it aims at is what is under it, so showing it farther out would
+  put it off its target. Aim feeds targeting, so this was not changed.
 
 `GCN_WIDE_ANCHOR` overrides the split, for trying others (1 keeps everything centred).
 
@@ -78,4 +88,5 @@ If one of them culls tightly, the game's 3D projection parameters are the place 
 - At `--scale=1` the scene's pixels are stretched across by 4/3. `--scale=2` or more covers it.
 - The briefing's frame spans the whole picture, so it is stretched with the wider picture, not
   kept at its proportions.
-- The lock-on bracket case above.
+- A marker whose texture is not in the list (see the markers above) is still anchored when it
+  crosses the split.
