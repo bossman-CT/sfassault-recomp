@@ -7,7 +7,12 @@ prompt, not an entry in the game's own menu, so the game's menu code and data ar
 With it on, while the title ("Press Start") or the main menu after it (Single Mode, VS Mode,
 Options, Bonus Game) is up and taking input:
 
-- A line at the bottom right says "Y: Exit to Desktop".
+- A line at the bottom right names the button the player has: "Triangle: Exit to Desktop" on a
+  PlayStation controller, "S: Exit to Desktop" with no controller on port 1, "Y: Exit to Desktop"
+  otherwise (#74). It follows the port that last had a button pressed or a stick moved. SDL
+  reports the controller's own type, and behind Steam Input (a virtual Xbox pad) SDL 2.30 reports
+  the real one when Steam says what it is. The game's Y is the top face button in both Face
+  buttons layouts, so the layout does not change the name.
 - Y (the controller's top face button, Triangle on a PlayStation controller; S on the
   keyboard) asks "Quit the game?" in the menu's window, with the game paused and its pad at
   rest. Yes (A, Enter, a click) ends the run as the menu's Quit does, saving `settings.txt` and
