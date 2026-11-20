@@ -1,4 +1,5 @@
-// Controls > Aiming (issues #40 and #48): flip Y on foot, in the Arwing, in the Landmaster.
+// Controls > Aiming (issues #40, #48, #78): flip Y on foot (and riding an Arwing's wing, which aims
+// the same way), in the Arwing, in the Landmaster.
 //
 // Invert Y for each vehicle is the game's own setting, kept with each player profile on the
 // memory card and reachable only from the title screen's Options. These switches flip the
@@ -37,7 +38,7 @@ const char* const kPath = "Controls/Aiming";
 
 auto& s_flip_onfoot =
     settings::toggle("controls.onfoot.flip_y", kPath, "Flip aim up/down on foot", false)
-        .help("Flips up and down for aiming on foot, on top of the game's own Invert Y Axis for the pilot. With "
+        .help("Flips up and down for aiming on foot, and for the gun on an Arwing's wing, on top of the game's own Invert Y Axis for the pilot. With "
               "the game's default (YES: up looks down), turning this on makes up look up. Flips the C-stick in "
               "Dual Stick, the control stick in R Button Run, and the control stick while R is held in Single "
               "Stick.");
@@ -91,11 +92,13 @@ void filter(int port, PadState& p) {
     }
     // Modern (onfoot_modern.cpp) rebuilds the C-stick first, up on the right stick being up on
     // the C-stick, so the flip below means the same with either scheme.
-    const Controls c = m == Mode::OnFoot || m == Mode::Landmaster ? game_mode::controls_of(port) : Controls::Unknown;
+    const Controls c = m == Mode::OnFoot || m == Mode::Landmaster || m == Mode::OnWing ? game_mode::controls_of(port)
+                                                                                         : Controls::Unknown;
     onfoot_modern::apply(port, p, m == Mode::OnFoot && c == Controls::DualStick);
     if (!p.connected) return;
     switch (m) {
     case Mode::OnFoot:
+    case Mode::OnWing:  // aims as on foot, so the same switch
         if (s_flip_onfoot) flip_aim(p, c);
         break;
     case Mode::Landmaster:
