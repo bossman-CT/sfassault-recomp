@@ -36,46 +36,73 @@ every mission. That is the late fade-in on Fortuna (#28).
 
 ## What the setting does
 
-Every store the game makes to the two variables (eight sites, all in `recomp/patches.txt`) goes
-through `sfassault_draw_range` (`src/draw_distance.cpp`), which multiplies the value by the
-setting. At Original it stores the game's own value, bit for bit. Unlimited multiplies by 1000,
-which puts every range past the far plane (50,000 units), so nothing is cut or faded by distance.
+The game reads the two variables at 23 places, all in model draw code: `fn_80068ABC`,
+`fn_80068C7C`, `fn_8006A510`, `fn_8006BA14`, `fn_8006E2A8`, `fn_8006EB8C`, `fn_8006F414`,
+`fn_8007017C`, `fn_80070BD0`, `fn_80070C78` and `fn_80088B00`. Each of those either runs under the
+draw-callback list (`fn_8003CA20`) in a sampled frame of the space battle, or calls only model and
+GX helpers. Every read goes through `sfassault_draw_range` (`recomp/patches.txt`,
+`src/draw_distance.cpp`). It returns the value times the setting, or the value itself at
+Original, and also when the frame's display-list buffer is running low (below). The game's own
+stores are untouched, so the variables always hold its own value. At Original the reads return
+it bit for bit. Unlimited multiplies by 1000, which puts every range past the far plane (50,000
+units), so nothing is cut or faded by distance.
 
-Only the draw pass reads the two variables: everything that calls the range test in a frame of
-the space battle is a draw callback. But drawing more is more work for the guest's CPU, and the
-game's timing follows its CPU time on the virtual clock. Replays of the recorded playthrough at
-Original and at 4x, with `GCN_STATE_HASH` every 600 frames, agree at each of those frames on the
-pad polls and the virtual time (to a tick) through missions 1 to 3, the Star Wolf fight included, with the same HUD
-at frame 27587. Between frames 62400 and 67200 (the snow mission, on foot, where 4x draws far more
-snow and trees) the 4x run's virtual time moves on by 337,837 ticks, about one 120 Hz retrace: a frame
-ran past its budget. From there the two runs play differently: at frame 66098 the Original run is
-in the hangar cutscene and the 4x run is still on foot.
-
-So the setting is one the guest sees (`AffectsGuest`): latched at a frame boundary and recorded in
-the input log, so a replay draws at the distance it was recorded with and stays exact. Its default
-is Original, because a log from before the setting existed replays at the default, and every route
-and recording so far was made at the original distance. At a higher value a heavy scene can still
-cost the game a frame, as it would on the console; making the virtual CPU faster there is a
-possible follow-up.
-
-## Known problem: values above Original can crash
+## The display-list buffer
 
 The game builds each frame's draws in a display-list buffer: 3 MB, split into two halves of
-1.5 MB that alternate frames, set up once at boot (`fn_8000DE88` calls `fn_80174078` with
+about 1.5 MB that alternate frames, set up once at boot (`fn_8000DE88` calls `fn_80174078` with
 0x300000, which calls `fn_801750C4`). Each half holds the frame's display lists from the bottom
 and the nodes of its four draw queues from the top (`fn_801753A0`, `fn_80175404`), and
-`fn_801751BC` walks the queues at the end of the frame. At the original distance a frame never
-fills it. At 4x the `fortuna` route (`SFASSAULT_DRAW_DISTANCE=4`) stops at frame 16680 with an
-MMU fault in `fn_801751BC`: a queue node pointer reads as garbage, so the lists and the nodes
-have run into each other.
+`fn_801751BC` walks the queues at the end of the frame. Nothing stops the two from meeting. At 4x,
+with the multiplier on the stores and no guard, the `fortuna` route ran them into each other and
+stopped at frame 16680 with an MMU fault in `fn_801751BC` (a queue node read as garbage).
 
-Until that is fixed, only Original is safe. Possible fixes: give the buffer more room (a larger
-size at boot, if the game's heap has it), or keep a frame's draws from passing the space left
-(`fn_801752A4` returns it, and some callers already check it).
+The guard: a read returns the multiplied range only while the frame's half still has half its
+room free (`fn_801752A4` works out the free room the same way). At Original the heaviest frames
+of the `fortuna` route leave at least 82% free (`SFASSAULT_DRAW_DISTANCE_LOG=1` prints the least
+free room every 600 frames). So the extra models only ever use room the game's own models don't
+need, and models within the original distance always draw. At Unlimited the route's least free
+room was 56%, and it ran past frame 16680 without a fault. That run then parted from its
+recording (below), so it is not yet checked to the route's end.
+
+## Timing: values above Original change the game's timing
+
+Drawing more is more work for the guest's CPU, and the game's timing follows its CPU time on the
+virtual clock. Every backward branch the recompiled code takes adds to a count (`IRQ_CHECK`,
+`g_vcount`), which is the guest's time, and interrupts are polled from it. More models drawn is
+more branches, so the frame ends later in guest time. Usually the frame still fits its budget and
+nothing changes. In a heavy scene it doesn't: a frame runs past its retrace, and from there the
+game runs differently.
+
+- The recorded playthrough at Original and at 4x (multiplier on the stores, `GCN_STATE_HASH`
+  every 600 frames): the same pad polls and virtual time (to a tick) at each of those frames
+  through missions 1 to 3, the Star Wolf fight included, with the same HUD at frame 27587. Between
+  frames 62400 and 67200 (the snow mission, on foot, where 4x draws far more snow and trees) the
+  4x run moves on by 337,837 ticks, about one 120 Hz retrace. By frame 66098 the Original run is in
+  the hangar cutscene and the 4x run is still on foot.
+- The `fortuna` route at Unlimited (multiplier on the reads, guarded): the replay parts from its
+  recording at frame 16725, where a recorded clock jump falls at a different poll.
+
+Moving the multiplier from the stores to the reads doesn't change this, as expected: every reader
+was already in draw code. So the setting is one the guest sees (`AffectsGuest`): latched at a
+frame boundary and recorded in the input log, so a replay draws at the distance it was recorded
+with and stays exact. Its default is Original, because a log from before the setting existed
+replays at the default, and every route and recording so far was made at the original distance.
+Every value above Original is affected.
+
+Making the extra drawing free in guest time would need a gcn-recomp mechanism: a game hook that
+stops `IRQ_CHECK` charging `g_vcount` (and polling) while it is held. Here it would be held from
+the point a model's range test passes only because of the multiplier until its draw callback
+returns. The poll must neither fire inside that window nor be skipped across it. One way is to
+save `g_vcount` on entry and restore it on exit, with `g_vlimit` raised meanwhile so no poll
+falls inside. The game side needs a hook at each draw callback's exit, or a "charge-free until
+the stack unwinds past here" form using r1.
 
 ## Testing
 
 - `tools/regress.ps1` (the default, Original) matches the baselines recorded before the setting
-  existed, and at Original frame 27587 of the playthrough is byte for byte the frame from before.
+  existed (`fortuna`, `title-short`), and at Original frame 27587 of the playthrough is byte for
+  byte the frame from before.
 - To see a value in a replay, record with it: a replay takes the value from its log, not from
-  `--set`.
+  `--set`. `SFASSAULT_DRAW_DISTANCE=<1 to 9>` forces a value for a test, after which the replay
+  may part from its recording (above).

@@ -58,16 +58,32 @@
 800ABE38 { extern uint32_t sfa_scene_start(uint32_t, uint32_t); c->r[0] = sfa_scene_start(c->r[30], c->r[0] & 0x1000u); SET_CR0(c->r[0]); }
 
 # Draw distance (issues #76, #28, src/draw_distance.cpp). The game draws a model only within
-# a scene-wide distance of the camera (sda-29516, 0x80385DD4) plus an offset (sda-29512),
-# fading it out over the last fifth. These are all its stores to the two: fn_80071054 works
-# them out every frame, fn_80072930 sets them for a view as it draws it, and fn_80071874
-# and fn_80071E58 set them up. Each stores the value times the Draw distance setting; at
-# Original the value itself.
-80071218 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[1].d)); }
-8007121C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[0].d)); }
-80071D14 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[2].d)); }
-80071D18 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[1].d)); }
-80071F00 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[3].d)); }
-80071F04 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[2].d)); }
-80072978 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); STF32(ea, sfassault_draw_range(c->f[1].d)); }
-8007297C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); STF32(ea, sfassault_draw_range(c->f[0].d)); }
+# a scene-wide distance of the camera (sda-29516, 0x80385DD4, worked out every frame by
+# fn_80071054) plus an offset (sda-29512), fading it out over the last fifth. These are all
+# the game's reads of the two, every one in a model's draw code (fn_80068ABC, fn_80068C7C,
+# fn_8006A510, fn_8006BA14, fn_8006E2A8, fn_8006EB8C, fn_8006F414, fn_8007017C, fn_80070BD0,
+# fn_80070C78, fn_80088B00). Each reads the value times the Draw distance setting, or the
+# value itself at Original or when the frame's display-list buffer is running low.
+80068AEC { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[2].d = v; c->ps1[2] = v; }
+80068B00 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+80068CBC { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[31].d = v; c->ps1[31] = v; }
+8006A54C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+8006A56C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+8006BA5C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+8006BA7C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+8006E3F0 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[2].d = v; c->ps1[2] = v; }
+8006EC3C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+8006EC50 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+8006F554 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+8006F56C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+8006FE8C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+80070264 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+8007027C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+80070360 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+8007056C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+80070754 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[1].d = v; c->ps1[1] = v; }
+80070BD0 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[3].d = v; c->ps1[3] = v; }
+80070BE4 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+80070C8C { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[3].d = v; c->ps1[3] = v; }
+80070C98 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29512); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
+80088F78 { double sfassault_draw_range(double); uint32_t ea = (c->r[13] + (uint32_t)-29516); double v = sfassault_draw_range(LDF32(ea)); c->f[0].d = v; c->ps1[0] = v; }
